@@ -1,9 +1,12 @@
 '''
 The following tool helps developers and likewise check their work on MatchaDB by providing an easy
 to use CLI interface, using Python 3, to run commands against the DB.
+
+sammatime22, 2021
 '''
 import requests
 import sys
+from display import Display
 
 # Different constants for the names of different commands used on Whisk.
 GET = "GET"
@@ -16,6 +19,8 @@ EXIT = "EXIT"
 # The current default protocol, http.
 PROTOCOL = "http://"   # Default is http
 
+# General String Constants
+WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021"
 
 def retrieve_command():
     '''
@@ -199,9 +204,10 @@ def main():
     '''
     The main method of the application.
     '''
+    whisk_display = Display()
+
     # Start of app
-    print("Welcome to Whisk, the MatchaDB Tester!")
-    print("SammaTime22, 2021")
+    whisk_display.print_general(WELCOME)
 
     # Set the variables of host and port to be global, and then set them
     global host
