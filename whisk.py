@@ -22,13 +22,18 @@ PROTOCOL = "http://"   # Default is http
 # General String Constants
 WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021"
 
-def retrieve_command():
+def retrieve_command(whisk_display):
     '''
     This method promts the user to provide a command, and then returns that command so that it can
     be used by the rest of the application.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''
-    print("Please provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT")
-    print("Do note that this is not case sensitive.")
+    whisk_display.print_general("\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT")
+    whisk_display.print_general("Do note that this is not case sensitive.")
 
     # Gather and return the command.
     return input("Your Command: ")
@@ -225,10 +230,10 @@ def main():
 
     while True:
         # Remind the user where the command is currently pointed at.
-        print("Using " + PROTOCOL + host + ":" + port + "/")
+        whisk_display.print_general("Using " + PROTOCOL + host + ":" + port + "/")
 
         # Get the command.
-        command_to_use = retrieve_command().upper()
+        command_to_use = retrieve_command(whisk_display).upper()
 
         # Check which command this is for and run said command accordingly.
         if (command_to_use == GET):
