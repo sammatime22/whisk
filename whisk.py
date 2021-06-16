@@ -39,10 +39,15 @@ def retrieve_command(whisk_display):
     return input("Your Command: ")
 
 
-def help_command():
+def help_command(whisk_display):
     '''
     Allows the user to get more information on different commands to better understand their 
     workings and how to use them.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''
     print("What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT")
     print("This is not case sensitive.")
@@ -52,37 +57,42 @@ def help_command():
 
     # Print help information accordingly.
     if (selected_command == GET):
-        print("This command allows users to retrieve data from the DB.")
-        print("Below are the promts provided with the GET command:")
-        print("From: Provide the name of the table in the database you would like data from.")
-        print("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+        whisk_display.print_general("This command allows users to retrieve data from the DB.")
+        whisk__display.print_general("Below are the promts provided with the GET command:")
+        whisk__display.print_general("From: Provide the name of the table in the database you would like data from.")
+        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
     elif (selected_command == POST):
-        print("This command allows users to insert data into the DB.")
-        print("Below are the promts provided with the POST command:")
-        print("From: Provide the name of the table in the database you would like to insert data.")
-        print("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
-        print("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
+        whisk__display.print_general("This command allows users to insert data into the DB.")
+        whisk__display.print_general("Below are the promts provided with the POST command:")
+        whisk__display.print_general("From: Provide the name of the table in the database you would like to insert data.")
+        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+        whisk__display.print_general("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
     elif (selected_command == UPDATE):
-        print("This command allows users to update data in the DB.")
-        print("Below are the promts provided with the UPDATE command:")
-        print("From: Provide the name of the table in the database you would like to update.")
-        print("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
-        print("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
+        whisk__display.print_general("This command allows users to update data in the DB.")
+        whisk__display.print_general("Below are the promts provided with the UPDATE command:")
+        whisk__display.print_general("From: Provide the name of the table in the database you would like to update.")
+        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+        whisk__display.print_general("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
     elif (selected_command == DELETE):
-        print("This command allows users to remove data from the DB.")
-        print("Below are the promts provided with the DELETE command:")
-        print("From: Provide the name of the table in the database you would remove data from.")
-        print("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+        whisk__display.print_general("This command allows users to remove data from the DB.")
+        whisk__display.print_general("Below are the promts provided with the DELETE command:")
+        whisk__display.print_general("From: Provide the name of the table in the database you would remove data from.")
+        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
     elif (selected_command == HELP):
-        print("After typing help in any casing, when prompted, provide the command of interest.")
+        whisk__display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
     elif (selected_command == EXIT):
-        print("Just simply type exit when promted in any casing and you will exit the app.")
+        whisk__display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
 
 
-def get_command():
+def get_command(whisk_display):
     '''
     This method collects the From and Select portions for a GET request, runs it against MatchaDB,
     and prints the response code. It will also print exceptions, given that they occur.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -99,18 +109,23 @@ def get_command():
     try:
         # Make the request and see the response code.
         response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        print(response)
-        print(response.content)
+        whisk__display.print_success(response)
+        whisk__display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        print("A connection error has occured.")
+        whisk__display.print_error("A connection error has occured.")
     except Exception as e:
-        print("An unidentified error has occured of type " + type(e) + ".")
+        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
-def post_command():
+def post_command(whisk_display):
     '''
     This method collects the From, Select, and Insert portions for a POST request, runs it against
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -132,19 +147,24 @@ def post_command():
     try:
         # Make the request and see the response code.
         response = requests.post(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        print(response)
-        print(response.content)
+        whisk__display.print_success(response)
+        whisk__display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        print("A connection error has occured.")
+        whisk__display.print_error("A connection error has occured.")
     except Exception as e:
-        print("An unidentified error has occured of type " + type(e) + ".")
+        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
-def update_command():
+def update_command(whisk_display):
     '''
     This method collects the From, Select, and Update portions for a UPDATE (put) request, runs it 
     against MatchaDB, and prints the response code. It will also print exceptions, given that they 
     occur.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -169,18 +189,23 @@ def update_command():
     try:
         # Make the request and see the response code.
         response = requests.put(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        print(response)
-        print(response.content)
+        whisk__display.print_success(response)
+        whisk__display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        print("A connection error has occured.")
+        whisk__display.print_error("A connection error has occured.")
     except Exception as e:
-        print("An unidentified error has occured of type " + type(e) + ".")
+        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
-def delete_command():
+def delete_command(whisk_display):
     '''
     This method collects the From and Select portions for a DELETE request, runs it against 
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
+
+    Parameters:
+    ----------
+    whisk_display : Display
+        The display object used by the whisk application to print content to the console
     '''   
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -197,12 +222,12 @@ def delete_command():
     try:
         # Make the request and see the response code.
         response = requests.delete(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        print(response)
-        print(response.content)
+        whisk__display.print_success(response)
+        whisk__display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        print("A connection error has occured.")
+        whisk__display.print_error("A connection error has occured.")
     except Exception as e:
-        print("An unidentified error has occured of type " + type(e) + ".")
+        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
 def main():
