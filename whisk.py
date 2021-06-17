@@ -58,30 +58,30 @@ def help_command(whisk_display):
     # Print help information accordingly.
     if (selected_command == GET):
         whisk_display.print_general("This command allows users to retrieve data from the DB.")
-        whisk__display.print_general("Below are the promts provided with the GET command:")
-        whisk__display.print_general("From: Provide the name of the table in the database you would like data from.")
-        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+        whisk_display.print_general("Below are the promts provided with the GET command:")
+        whisk_display.print_general("From: Provide the name of the table in the database you would like data from.")
+        whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
     elif (selected_command == POST):
-        whisk__display.print_general("This command allows users to insert data into the DB.")
-        whisk__display.print_general("Below are the promts provided with the POST command:")
-        whisk__display.print_general("From: Provide the name of the table in the database you would like to insert data.")
-        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
-        whisk__display.print_general("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
+        whisk_display.print_general("This command allows users to insert data into the DB.")
+        whisk_display.print_general("Below are the promts provided with the POST command:")
+        whisk_display.print_general("From: Provide the name of the table in the database you would like to insert data.")
+        whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+        whisk_display.print_general("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
     elif (selected_command == UPDATE):
-        whisk__display.print_general("This command allows users to update data in the DB.")
-        whisk__display.print_general("Below are the promts provided with the UPDATE command:")
-        whisk__display.print_general("From: Provide the name of the table in the database you would like to update.")
-        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
-        whisk__display.print_general("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
+        whisk_display.print_general("This command allows users to update data in the DB.")
+        whisk_display.print_general("Below are the promts provided with the UPDATE command:")
+        whisk_display.print_general("From: Provide the name of the table in the database you would like to update.")
+        whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+        whisk_display.print_general("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
     elif (selected_command == DELETE):
-        whisk__display.print_general("This command allows users to remove data from the DB.")
-        whisk__display.print_general("Below are the promts provided with the DELETE command:")
-        whisk__display.print_general("From: Provide the name of the table in the database you would remove data from.")
-        whisk__display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+        whisk_display.print_general("This command allows users to remove data from the DB.")
+        whisk_display.print_general("Below are the promts provided with the DELETE command:")
+        whisk_display.print_general("From: Provide the name of the table in the database you would remove data from.")
+        whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
     elif (selected_command == HELP):
-        whisk__display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
+        whisk_display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
     elif (selected_command == EXIT):
-        whisk__display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
+        whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
 
 
 def get_command(whisk_display):
@@ -109,12 +109,12 @@ def get_command(whisk_display):
     try:
         # Make the request and see the response code.
         response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk__display.print_success(response)
-        whisk__display.print_success(response.content)
+        whisk_display.print_success(response)
+        whisk_display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        whisk__display.print_error("A connection error has occured.")
+        whisk_display.print_error("A connection error has occured.")
     except Exception as e:
-        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
+        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
 def post_command(whisk_display):
@@ -147,12 +147,12 @@ def post_command(whisk_display):
     try:
         # Make the request and see the response code.
         response = requests.post(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk__display.print_success(response)
-        whisk__display.print_success(response.content)
+        whisk_display.print_success(response)
+        whisk_display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        whisk__display.print_error("A connection error has occured.")
+        whisk_display.print_error("A connection error has occured.")
     except Exception as e:
-        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
+        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
 def update_command(whisk_display):
@@ -189,12 +189,12 @@ def update_command(whisk_display):
     try:
         # Make the request and see the response code.
         response = requests.put(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk__display.print_success(response)
-        whisk__display.print_success(response.content)
+        whisk_display.print_success(response)
+        whisk_display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        whisk__display.print_error("A connection error has occured.")
+        whisk_display.print_error("A connection error has occured.")
     except Exception as e:
-        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
+        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
 def delete_command(whisk_display):
@@ -222,12 +222,12 @@ def delete_command(whisk_display):
     try:
         # Make the request and see the response code.
         response = requests.delete(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk__display.print_success(response)
-        whisk__display.print_success(response.content)
+        whisk_display.print_success(response)
+        whisk_display.print_success(response.content)
     except requests.exceptions.ConnectionError:
-        whisk__display.print_error("A connection error has occured.")
+        whisk_display.print_error("A connection error has occured.")
     except Exception as e:
-        whisk__display.print_error("An unidentified error has occured of type " + type(e) + ".")
+        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
 
 
 def main():
@@ -262,15 +262,15 @@ def main():
 
         # Check which command this is for and run said command accordingly.
         if (command_to_use == GET):
-            get_command()
+            get_command(whisk_display)
         elif (command_to_use == POST):
-            post_command()
+            post_command(whisk_display)
         elif (command_to_use == UPDATE):
-            update_command()
+            update_command(whisk_display)
         elif (command_to_use == DELETE):
-            delete_command()
+            delete_command(whisk_display)
         elif (command_to_use == HELP):
-            help_command()
+            help_command(whisk_display)
         elif (command_to_use == EXIT):
             break
 
