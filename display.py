@@ -3,6 +3,15 @@ This class helps to facilitate better console output for the Whisk application.
 
 sammatime22
 '''
+from enum import Enum
+
+class ColorEnum(Enum):
+    '''
+    An enum class used to define colors for the Display class for instantiation
+    '''
+    RED = 0
+    GREEN = 1
+    BLUE = 2
 
 class Display:
     '''
@@ -14,8 +23,10 @@ class Display:
     GREEN = "\033[92m{}\033[00m"
     BLUE = "\033[96m{}\033[00m"
 
+    # Color array to use for customized instantiation of the Display class
+    color_choices = [RED, GREEN, BLUE]
 
-    # Color-Descriptive relation
+    # Color-Descriptive relation defaults
     success = GREEN
     error = RED
     general = BLUE
@@ -27,10 +38,22 @@ class Display:
         self.print_success("Display Initialized...")
 
 
-    def __init__(self, success_color_choice, error_color_choice, general_color_choice):
+    def configure(self, success_color_choice, error_color_choice, general_color_choice):
         '''
-        An initializer type that allows the user to choose which colors they want for each description type.
+        A configure method that allows the user to choose which colors they want for each description type.
+
+        Parameters
+        ----------
+        success_color_choice : int
+            An integer defining the color choice for success messages
+        error_color_choice : int
+            An integer defining the color choice for error messages
+        general_color_choice : int
+            An integer defining the color choice for general messages
         '''
+        self.success = color_choices[success_color_choice]
+        self.error = color_choices[error_color_choice]
+        self.general = color_choices[general_color_choice]
 
     def print_success(self, content):
         '''
