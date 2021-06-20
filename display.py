@@ -53,14 +53,14 @@ class Display:
             An integer defining the color choice for general messages
         '''
         if success_color_choice is not None:
-            self.success = color_choices[success_color_choice]
+            self.success = self.color_choices[success_color_choice]
             self.print_success("Success Color Initialized...")
         if error_color_choice is not None:
-            self.error = color_choices[error_color_choice]
+            self.error = self.color_choices[error_color_choice]
             self.print_error("Error Color Initialized...")
         if general_color_choice is not None:
-            self.general = color_choices[general_color_choice]
-            self.print_general("Genearl Color Initialized...")
+            self.general = self.color_choices[general_color_choice]
+            self.print_general("General Color Initialized...")
         self.print_success("Display Initialized...")
 
 
@@ -78,14 +78,14 @@ class Display:
             An integer defining the color choice for general messages
         '''
         if success_color_choice is not None:
-            self.success = color_choices[success_color_choice]
+            self.success = self.color_choices[success_color_choice]
             self.print_success("Success Color Configured...")
         if error_color_choice is not None:
-            self.error = color_choices[error_color_choice]
+            self.error = self.color_choices[error_color_choice]
             self.print_error("Error Color Configured...")
         if general_color_choice is not None:
-            self.general = color_choices[general_color_choice]
-            self.print_general("Genearl Color Configured...")
+            self.general = self.color_choices[general_color_choice]
+            self.print_general("General Color Configured...")
 
 
     def print_success(self, content):
