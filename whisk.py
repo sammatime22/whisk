@@ -16,9 +16,6 @@ DELETE = "DELETE"
 HELP = "HELP"
 EXIT = "EXIT"
 
-# The current default protocol, http.
-PROTOCOL = "http://"   # Default is http
-
 # General String Constants
 WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021"
 
@@ -239,11 +236,6 @@ def main():
     # Start of app
     whisk_display.print_general(WELCOME)
 
-    # Set the variables of host and port to be global, and then set them
-    global host
-    global port
-    host = "127.0.0.1"     # Default is localhost
-    port = "11150"          # Default is port 8080
 
     # Get the hostname, if it exists.
     if len(sys.argv) > 2:
