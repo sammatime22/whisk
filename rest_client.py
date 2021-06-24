@@ -45,10 +45,37 @@ class RestClient():
             self.port = port
 
     
-    def get_request(self):
+    def get_request(self, from_portion, select_portion):
         '''
         Runs a get request against the DB.
+
+        Parameters
+        ----------
+        from_portion : JSON Object
+            The From Portion for the query to be made on MatchaDB
+        select_portion : JSON Object
+            The Select Portion for the query to be made on MatchaDB      
+
+        Return
+        ----------
+        response.header : string
+            The header of the response
+        response.content OR statement : string
+            The content of the response or a statement containing the error
         '''
+
+
+        parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
+
+
+        try:
+            # Make the request and see the response code.
+            response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
+            return response.header, response.content
+        except requests.exceptions.ConnectionError:
+            return response.header, "A connection error has occured."
+        except Exception as e:
+            return response.header, "An unidentified error has occured of type " + type(e) + "."
 
 
     def post_request(self):

@@ -100,18 +100,7 @@ def get_command(whisk_display):
     spart_three = input("Select (value): ")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-    # Develop the Parameter Values.
-    parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
-
-    try:
-        # Make the request and see the response code.
-        response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk_display.print_success(response)
-        whisk_display.print_success(response.content)
-    except requests.exceptions.ConnectionError:
-        whisk_display.print_error("A connection error has occured.")
-    except Exception as e:
-        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
+    # Add Rest Client method here
 
 
 def post_command(whisk_display):
