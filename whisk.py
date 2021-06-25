@@ -81,7 +81,7 @@ def help_command(whisk_display):
         whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
 
 
-def get_command(whisk_display):
+def get_command(whisk_display, rest_client):
     '''
     This method collects the From and Select portions for a GET request, runs it against MatchaDB,
     and prints the response code. It will also print exceptions, given that they occur.
@@ -90,6 +90,8 @@ def get_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    rest_client : RestClient
+        The rest client in use by the whisk application to run the GET request on the MatchaDB
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -100,7 +102,8 @@ def get_command(whisk_display):
     spart_three = input("Select (value): ")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-    # Add Rest Client method here
+    # Use the Rest Client
+    rest_client.get_command(from_portion, select_portion)
 
 
 def post_command(whisk_display):
@@ -222,9 +225,13 @@ def main():
     '''
     whisk_display = Display()
 
+
     # Start of app
     whisk_display.print_general(WELCOME)
 
+    protocol = None
+    host = None
+    port = None
 
     # Get the hostname, if it exists.
     if len(sys.argv) > 2:
@@ -233,6 +240,9 @@ def main():
     # Get the portname, if it exists.
     if len(sys.argv) > 3:
         port = sys.argv[2]
+
+    rest_client = RestClient(protocol, host, port)
+    protocol, host, port = rest_client.get_protocol_host_port()
 
     while True:
         # Remind the user where the command is currently pointed at.
@@ -243,13 +253,13 @@ def main():
 
         # Check which command this is for and run said command accordingly.
         if (command_to_use == GET):
-            get_command(whisk_display)
+            get_command(whisk_display, rest_client)
         elif (command_to_use == POST):
-            post_command(whisk_display)
+            post_command(whisk_display, rest_client)
         elif (command_to_use == UPDATE):
-            update_command(whisk_display)
+            update_command(whisk_display, rest_client)
         elif (command_to_use == DELETE):
-            delete_command(whisk_display)
+            delete_command(whisk_display, rest_client)
         elif (command_to_use == HELP):
             help_command(whisk_display)
         elif (command_to_use == EXIT):

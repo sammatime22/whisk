@@ -45,6 +45,22 @@ class RestClient():
             self.port = port
 
     
+    def get_protocol_host_port(self):
+        '''
+        Returns the protocol, host, and port used by Whisk.    
+
+        Return
+        ----------
+        protocol : string
+            The protocol in use by the Rest Client
+        host : string
+            The host in use by the Rest Client
+        port : string
+            The port in use by the Rest Client
+        '''
+        return self.protocol, self.host, self.port
+
+
     def get_request(self, from_portion, select_portion):
         '''
         Runs a get request against the DB.
