@@ -75,8 +75,8 @@ class RestClient():
         ----------
         status : boolean
             The status of the request (successful - True, unsuccessful - False)
-        response.content OR statement : string
-            The content of the response or a statement containing the error
+        response OR statement : response object OR string
+            The response object or a statement containing the error
         '''
         parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
 
@@ -84,27 +84,102 @@ class RestClient():
         try:
             # Make the request and see the response code.
             response = requests.get(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
-            return True, response.content
+            return True, response
         except requests.exceptions.ConnectionError:
             return False, "A connection error has occured."
         except Exception as e:
             return False, "An unidentified error has occured: " + str(e) + "."
 
 
-    def post_request(self):
+    def post_request(self, from_portion, select_portion, insert_portion):
         '''
         Runs a post request against the DB.
+
+        Parameters
+        ----------
+        from_portion : JSON Object
+            The From Portion for the query to be made on MatchaDB
+        select_portion : JSON Object
+            The Select Portion for the query to be made on MatchaDB 
+        insert_portion : JSON Object
+            The Insert Portion for the query to be made on MatchaDB     
+
+        Return
+        ----------
+        status : boolean
+            The status of the request (successful - True, unsuccessful - False)
+        response OR statement : response object OR string
+            The response object or a statement containing the error
         '''
+        parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + ", \"Insert\": " + insert_portion + "}"
 
 
-    def update_request(self):
+        try:
+            response = requests.post(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
+            return True, response
+        except requests.exceptions.ConnectionError:
+            return False, "A connection error has occured."
+        except Exception as e:
+            return False, "An unidentified error has occured: " + str(e) + "."
+
+
+    def update_request(self, from_portion, select_portion, update_portion):
         '''
         Runs an update (PUT) request against the DB.
+
+        Parameters
+        ----------
+        from_portion : JSON Object
+            The From Portion for the query to be made on MatchaDB
+        select_portion : JSON Object
+            The Select Portion for the query to be made on MatchaDB 
+        update_portion : JSON Object
+            The Update Portion for the query to be made on MatchaDB     
+
+        Return
+        ----------
+        status : boolean
+            The status of the request (successful - True, unsuccessful - False)
+        response OR statement : response object OR string
+            The response object or a statement containing the error
         '''
+        parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + ", \"Update\": " + update_portion + "}"
 
 
-    def delete_request(self):
+        try:
+            response = requests.put(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
+            return True, response
+        except requests.exceptions.ConnectionError:
+            return False, "A connection error has occured."
+        except Exception as e:
+            return False, "An unidentified error has occured: " + str(e) + "."
+
+
+    def delete_request(self, from_portion, select_portion):
         '''
         Runs a delete request against the DB.
-        '''
 
+        Parameters
+        ----------
+        from_portion : JSON Object
+            The From Portion for the query to be made on MatchaDB
+        select_portion : JSON Object
+            The Select Portion for the query to be made on MatchaDB      
+
+        Return
+        ----------
+        status : boolean
+            The status of the request (successful - True, unsuccessful - False)
+        response OR statement : response object OR string
+            The response object or a statement containing the error
+        '''
+        parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
+
+
+        try:
+            response = requests.delete(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
+            return True, response
+        except requests.exceptions.ConnectionError:
+            return False, "A connection error has occured."
+        except Exception as e:
+            return False, "An unidentified error has occured: " + str(e) + "."
