@@ -3,6 +3,7 @@ This file handles the entirety of the development of the REST calls to Matcha DB
 
 sammatime22, 2021
 '''
+import requests
 
 
 class RestClient():
@@ -11,8 +12,6 @@ class RestClient():
     independently to developing, conducting, and interpreting the result of a REST request against
     the Matcha DB instance.
     '''
-
-
     # Default networking values.
     DEFAULT_PROTOCOL = "http://"   # Default is http
     DEFAULT_HOST = "127.0.0.1"     # Default is localhost
@@ -74,24 +73,22 @@ class RestClient():
 
         Return
         ----------
-        response.header : string
-            The header of the response
+        status : boolean
+            The status of the request (successful - True, unsuccessful - False)
         response.content OR statement : string
             The content of the response or a statement containing the error
         '''
-
-
         parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
 
 
         try:
             # Make the request and see the response code.
-            response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-            return response.header, response.content
+            response = requests.get(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
+            return True, response.content
         except requests.exceptions.ConnectionError:
-            return response.header, "A connection error has occured."
+            return False, "A connection error has occured."
         except Exception as e:
-            return response.header, "An unidentified error has occured of type " + type(e) + "."
+            return False, "An unidentified error has occured: " + str(e) + "."
 
 
     def post_request(self):

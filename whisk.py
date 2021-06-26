@@ -4,9 +4,9 @@ to use CLI interface, using Python 3, to run commands against the DB.
 
 sammatime22, 2021
 '''
-import requests
 import sys
 from display import Display
+from rest_client import RestClient
 
 # Different constants for the names of different commands used on Whisk.
 GET = "GET"
@@ -103,7 +103,12 @@ def get_command(whisk_display, rest_client):
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Use the Rest Client
-    rest_client.get_command(from_portion, select_portion)
+    successful, response = rest_client.get_request(from_portion, select_portion)
+
+    if successful:
+        whisk_display.print_success(response)
+    else:
+        whisk_display.print_error(response)
 
 
 def post_command(whisk_display):
@@ -246,7 +251,7 @@ def main():
 
     while True:
         # Remind the user where the command is currently pointed at.
-        whisk_display.print_general("Using " + PROTOCOL + host + ":" + port + "/")
+        whisk_display.print_general("Using " + protocol + host + ":" + port + "/")
 
         # Get the command.
         command_to_use = retrieve_command(whisk_display).upper()
