@@ -5,8 +5,8 @@ to use CLI interface, using Python 3, to run commands against the DB.
 sammatime22, 2021
 '''
 import sys
-from display import Display
-from rest_client import RestClient
+from src.display import Display
+from src.rest_client import RestClient
 
 # Different constants for the names of different commands used on Whisk.
 GET = "GET"
@@ -218,7 +218,7 @@ def delete_command(whisk_display, rest_client):
     successful, response = rest_client.delete_request(from_portion, select_portion)
 
     if successful:
-        if response.status_code == 200:
+        if response.status_code == 204:
             whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
         else:
             whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
