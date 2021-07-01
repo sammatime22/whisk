@@ -9,6 +9,7 @@ import sys
 sys.path.append('src')
 
 import unittest
+from unittest.mock import patch
 from rest_client import RestClient
 
 
@@ -36,16 +37,29 @@ class TestRestClient(unittest.TestCase):
     # This rest client just has the default settings - no need to get fancy
     test_rest_client = RestClient()
 
-
-    def test_01_successful_get():
+    @patch("requests.get")
+    def test_01_successful_get(self, mock_requests_get):
         '''
         Tests the GET request when successful.
         '''
+        # Build a check to ensure that the parameters provided are right
+        mock_requests_get.assert_called_with({"From": self.test_sample_from_portion, \
+            "Select": self.test_sample_select_portion})
+
         # Run the Query
-        # Check that the parameters provided are right
+        successful, contents = self.test_rest_client\
+                                        .get_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
         # Make sure the request looks right
+        # TODO
+
         # Make sure we were "successful" in the eyes of the Rest Client
+        assert(successful, True)
+        
         # Make sure that as mocked, the response is good
+        assert(contents.status_code, 200)
+        # Make some mocked content and check that it matches
+
 
     def test_02_unsuccessful_get():
         '''
