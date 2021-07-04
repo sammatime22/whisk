@@ -9,7 +9,7 @@ import sys
 sys.path.append('src')
 
 import unittest
-from unittest.mock import Mock
+from unittest.mock import patch
 from rest_client import RestClient
 
 
@@ -37,57 +37,45 @@ class TestRestClient(unittest.TestCase):
     # This rest client just has the default settings - no need to get fancy
     test_rest_client = RestClient()
 
-    requests = Mock()
 
     def test_01_successful_get(self):
         '''
         Tests the GET request when successful.
         '''
-        # Build a Mock side effect and set it to the requests library
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.content = {"Flavor=Death by Chocolate", "Price=3.50"}
-        self.requests.get.side_effect = mock_response
 
-        # Run the Query
-        successful, contents = self.test_rest_client\
-                                        .get_request(self.test_sample_from_portion, self.test_sample_select_portion)
+        # Patch the requests library
+        with patch("requests.get") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 200
+            mock_request.return_value.content = "[[\"Flavor\"=\"Death by Chocolate\", \"Price\"=2.00]]"
 
-        # Make sure we were "successful" in the eyes of the Rest Client
-        assert successful == True
-        
-        # Make sure that as mocked, the response is good
-        assert contents.status_code == 200
-        # Make some mocked content and check that it matches
+            # Run the request
+            success, response = \
+                self.test_rest_client.get_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 200
+            assert response.content == "[[\"Flavor\"=\"Death by Chocolate\", \"Price\"=2.00]]"
 
 
     def test_02_unsuccessful_get():
         '''
         Tests the GET request when unsuccessful.
         '''
-        # Run the Query
-        # Check that the parameters provided are right
-        # Make sure the request looks right
-        # Make sure we were "successful" in the eyes of the Rest Client
-        # Make sure that as mocked, the response is bad
+
 
     def test_03_connection_error_get():
         '''
         Tests the GET request with a connection error.
         '''
-        # Run the Query
-        # Check that the parameters provided are right
-        # Make sure the request looks right
-        # Make sure we were "unsuccessful" in the eyes of the Rest Client for a connnection error
+
 
     def test_04_unknown_exception_get():
         '''
         Tests the GET request with an unknown error
         '''
-        # Run the Query
-        # Check that the parameters provided are right
-        # Make sure the request looks right
-        # Make sure we were "unsuccessful" in the eyes of the Rest Client for an unexplained error
+
 
     def test_05_successful_post():
         '''
