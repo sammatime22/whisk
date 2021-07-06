@@ -42,7 +42,6 @@ class TestRestClient(unittest.TestCase):
         '''
         Tests the GET request when successful.
         '''
-
         # Patch the requests library
         with patch("requests.get") as mock_request:
             # Get the mocking set up
@@ -76,7 +75,6 @@ class TestRestClient(unittest.TestCase):
             assert success == True
             assert response.status_code == 404
             assert response.content == ""
-     
 
 
     def test_03_connection_error_get(self):
@@ -105,73 +103,207 @@ class TestRestClient(unittest.TestCase):
         assert success == False
         assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
+
     def test_05_successful_post(self):
         '''
         Tests the POST request when successful.
         '''
+        # Patch the requests library
+        with patch("requests.post") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 201
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.post_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                   self.test_sample_insert_portion)
+
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 201
+            assert response.content == ""
 
 
     def test_06_unsuccessful_post(self):
         '''
         Tests the POST request when unsuccessful.
         '''
+        with patch("requests.post") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 409
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.post_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                   self.test_sample_insert_portion)
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 409
+            assert response.content == ""
 
 
     def test_07_connection_error_post(self):
         '''
         Tests the POST request with a connection error.
         '''
+        # Try making the request, but with a bad url
+        bad_rest_client = RestClient("http://", "255.255.255.255", "22")
+        success, response = \
+            bad_rest_client.post_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                self.test_sample_insert_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "A connection error has occured."
 
 
     def test_08_unknown_exception_post(self):
         '''
         Tests the POST request with an unknown error
         '''
+        bad_rest_client = RestClient(RestClient(), 2, 3)
+        success, response = \
+            bad_rest_client.post_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                self.test_sample_insert_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
 
     def test_09_successful_update(self):
         '''
         Tests the UPDATE request when successful.
         '''
+        # Patch the requests library
+        with patch("requests.put") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 200
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.update_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                   self.test_sample_update_portion)
+
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 200
+            assert response.content == ""
 
 
     def test_10_unsuccessful_update(self):
         '''
         Tests the UPDATE request when unsuccessful.
         '''
+        with patch("requests.put") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 409
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.update_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                   self.test_sample_update_portion)
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 409
+            assert response.content == ""
 
 
     def test_11_connection_error_update(self):
         '''
         Tests the UPDATE request with a connection error.
         '''
+        # Try making the request, but with a bad url
+        bad_rest_client = RestClient("http://", "255.255.255.255", "22")
+        success, response = \
+            bad_rest_client.update_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                self.test_sample_update_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "A connection error has occured."
 
 
     def test_12_unknown_exception_update(self):
         '''
         Tests the UPDATE request with an unknown error
         '''
+        bad_rest_client = RestClient(RestClient(), 2, 3)
+        success, response = \
+            bad_rest_client.update_request(self.test_sample_from_portion, self.test_sample_select_portion,\
+                                                self.test_sample_update_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
 
     def test_13_successful_delete(self):
         '''
         Tests the DELETE request when successful.
         '''
+        # Patch the requests library
+        with patch("requests.delete") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 204
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.delete_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 204
+            assert response.content == ""
 
 
     def test_14_unsuccessful_delete(self):
         '''
         Tests the DELETE request when unsuccessful.
         '''
+        with patch("requests.delete") as mock_request:
+            # Get the mocking set up
+            mock_request.return_value.status_code = 409
+            mock_request.return_value.content = ""
+
+            # Run the request
+            success, response = \
+                self.test_rest_client.delete_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
+            # Test that the request contents came back as expected
+            assert success == True
+            assert response.status_code == 409
+            assert response.content == ""
 
 
     def test_15_connection_error_delete(self):
         '''
         Tests the DELETE request with a connection error.
         '''
+        # Try making the request, but with a bad url
+        bad_rest_client = RestClient("http://", "255.255.255.255", "22")
+        success, response = \
+            bad_rest_client.delete_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "A connection error has occured."
 
 
     def test_16_unknown_exception_delete(self):
         '''
         Tests the DELETE request with an unknown error
         '''
+        bad_rest_client = RestClient(RestClient(), 2, 3)
+        success, response = \
+            bad_rest_client.delete_request(self.test_sample_from_portion, self.test_sample_select_portion)
+
+        # Test that the request contents came back as expected
+        assert success == False
+        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
+
