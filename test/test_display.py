@@ -3,6 +3,11 @@ This file tests the Display class, its methods and other relevant things, such t
 
 sammatime22, 2021
 '''
+# Get the path to the display module (note as this baseline is so small, 
+# this is to be run in the home dir of the project).
+import sys
+sys.path.append('src')
+
 import unittest
 from unittest.mock import patch, call
 from display import Display

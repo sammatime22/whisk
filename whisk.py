@@ -4,9 +4,9 @@ to use CLI interface, using Python 3, to run commands against the DB.
 
 sammatime22, 2021
 '''
-import requests
 import sys
-from display import Display
+from src.display import Display
+from src.rest_client import RestClient
 
 # Different constants for the names of different commands used on Whisk.
 GET = "GET"
@@ -15,9 +15,6 @@ UPDATE = "UPDATE"
 DELETE = "DELETE"
 HELP = "HELP"
 EXIT = "EXIT"
-
-# The current default protocol, http.
-PROTOCOL = "http://"   # Default is http
 
 # General String Constants
 WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021"
@@ -84,7 +81,7 @@ def help_command(whisk_display):
         whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
 
 
-def get_command(whisk_display):
+def get_command(whisk_display, rest_client):
     '''
     This method collects the From and Select portions for a GET request, runs it against MatchaDB,
     and prints the response code. It will also print exceptions, given that they occur.
@@ -93,6 +90,8 @@ def get_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    rest_client : RestClient
+        The rest client in use by the whisk application to run the GET request on the MatchaDB
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -103,21 +102,19 @@ def get_command(whisk_display):
     spart_three = input("Select (value): ")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-    # Develop the Parameter Values.
-    parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
+    # Use the Rest Client
+    successful, response = rest_client.get_request(from_portion, select_portion)
 
-    try:
-        # Make the request and see the response code.
-        response = requests.get(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk_display.print_success(response)
-        whisk_display.print_success(response.content)
-    except requests.exceptions.ConnectionError:
-        whisk_display.print_error("A connection error has occured.")
-    except Exception as e:
-        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
+    if successful:
+        if response.status_code == 200:
+            whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+        else:
+            whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
+    else:
+        whisk_display.print_error(response)
 
 
-def post_command(whisk_display):
+def post_command(whisk_display, rest_client):
     '''
     This method collects the From, Select, and Insert portions for a POST request, runs it against
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -126,6 +123,8 @@ def post_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    rest_client : RestClient
+        The rest client in use by the whisk application to run the POST request on the MatchaDB
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -139,23 +138,19 @@ def post_command(whisk_display):
     # Gather the Insert portion of the command.
     insert_portion = input("Insert: ")
 
-    # Develop the Parameter Values.
-    parameter_vals = "{\"From\": " + from_portion \
-                    + ", \"Select\": " + select_portion \
-                    + ", \"Insert\": " + insert_portion + "}"
+    # Use the Rest Client
+    successful, response = rest_client.post_request(from_portion, select_portion, insert_portion)
 
-    try:
-        # Make the request and see the response code.
-        response = requests.post(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk_display.print_success(response)
-        whisk_display.print_success(response.content)
-    except requests.exceptions.ConnectionError:
-        whisk_display.print_error("A connection error has occured.")
-    except Exception as e:
-        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
+    if successful:
+        if response.status_code == 201:
+            whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+        else:
+            whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
+    else:
+        whisk_display.print_error(response)
 
 
-def update_command(whisk_display):
+def update_command(whisk_display, rest_client):
     '''
     This method collects the From, Select, and Update portions for a UPDATE (put) request, runs it 
     against MatchaDB, and prints the response code. It will also print exceptions, given that they 
@@ -165,6 +160,8 @@ def update_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    rest_client : RestClient
+        The rest client in use by the whisk application to run the PUT (update) request on the MatchaDB
     '''
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -181,23 +178,19 @@ def update_command(whisk_display):
     upart_three = input("Update (value): ")
     update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
 
-    # Develop the Parameter Values.
-    parameter_vals = "{\"From\": " + from_portion \
-                    + ", \"Select\": " + select_portion \
-                    + ", \"Update\": " + update_portion + "}"
+    # Use the Rest Client
+    successful, response = rest_client.update_request(from_portion, select_portion, update_portion)
 
-    try:
-        # Make the request and see the response code.
-        response = requests.put(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk_display.print_success(response)
-        whisk_display.print_success(response.content)
-    except requests.exceptions.ConnectionError:
-        whisk_display.print_error("A connection error has occured.")
-    except Exception as e:
-        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
+    if successful:
+        if response.status_code == 200:
+            whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+        else:
+            whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
+    else:
+        whisk_display.print_error(response)
 
 
-def delete_command(whisk_display):
+def delete_command(whisk_display, rest_client):
     '''
     This method collects the From and Select portions for a DELETE request, runs it against 
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -206,6 +199,8 @@ def delete_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    rest_client : RestClient
+        The rest client in use by the whisk application to run the DELETE request on the MatchaDB
     '''   
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
@@ -219,15 +214,16 @@ def delete_command(whisk_display):
     # Develop the Parameter Values.
     parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
 
-    try:
-        # Make the request and see the response code.
-        response = requests.delete(PROTOCOL + host + ":" + port + "/", data = repr(parameter_vals))
-        whisk_display.print_success(response)
-        whisk_display.print_success(response.content)
-    except requests.exceptions.ConnectionError:
-        whisk_display.print_error("A connection error has occured.")
-    except Exception as e:
-        whisk_display.print_error("An unidentified error has occured of type " + type(e) + ".")
+    # Use the Rest Client
+    successful, response = rest_client.delete_request(from_portion, select_portion)
+
+    if successful:
+        if response.status_code == 204:
+            whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+        else:
+            whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
+    else:
+        whisk_display.print_error(response)
 
 
 def main():
@@ -236,14 +232,13 @@ def main():
     '''
     whisk_display = Display()
 
+
     # Start of app
     whisk_display.print_general(WELCOME)
 
-    # Set the variables of host and port to be global, and then set them
-    global host
-    global port
-    host = "127.0.0.1"     # Default is localhost
-    port = "11150"          # Default is port 8080
+    protocol = None
+    host = None
+    port = None
 
     # Get the hostname, if it exists.
     if len(sys.argv) > 2:
@@ -253,22 +248,25 @@ def main():
     if len(sys.argv) > 3:
         port = sys.argv[2]
 
+    rest_client = RestClient(protocol, host, port)
+    protocol, host, port = rest_client.get_protocol_host_port()
+
     while True:
         # Remind the user where the command is currently pointed at.
-        whisk_display.print_general("Using " + PROTOCOL + host + ":" + port + "/")
+        whisk_display.print_general("Using " + protocol + host + ":" + port + "/")
 
         # Get the command.
         command_to_use = retrieve_command(whisk_display).upper()
 
         # Check which command this is for and run said command accordingly.
         if (command_to_use == GET):
-            get_command(whisk_display)
+            get_command(whisk_display, rest_client)
         elif (command_to_use == POST):
-            post_command(whisk_display)
+            post_command(whisk_display, rest_client)
         elif (command_to_use == UPDATE):
-            update_command(whisk_display)
+            update_command(whisk_display, rest_client)
         elif (command_to_use == DELETE):
-            delete_command(whisk_display)
+            delete_command(whisk_display, rest_client)
         elif (command_to_use == HELP):
             help_command(whisk_display)
         elif (command_to_use == EXIT):
