@@ -12,6 +12,8 @@
 
 2021/06/20 - Implemented Display Singleton
 
+2021/07/05 - Implemented Rest Client Singleton
+
 **System Requirements**
 
 Python 3: 
