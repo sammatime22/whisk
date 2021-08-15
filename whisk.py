@@ -6,6 +6,7 @@ sammatime22, 2021
 '''
 import sys
 from src.display import Display
+from src.input_machine import InputMachine
 from src.rest_client import RestClient
 
 # Different constants for the names of different commands used on Whisk.
@@ -19,7 +20,7 @@ EXIT = "EXIT"
 # General String Constants
 WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021"
 
-def retrieve_command(whisk_display):
+def retrieve_command(whisk_display, input_machine):
     '''
     This method promts the user to provide a command, and then returns that command so that it can
     be used by the rest of the application.
@@ -28,15 +29,17 @@ def retrieve_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''
     whisk_display.print_general("\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT")
     whisk_display.print_general("Do note that this is not case sensitive.")
 
     # Gather and return the command.
-    return input("Your Command: ")
+    return input_machine.gather_input("Your Command: ")
 
 
-def help_command(whisk_display):
+def help_command(whisk_display, input_machine):
     '''
     Allows the user to get more information on different commands to better understand their 
     workings and how to use them.
@@ -45,12 +48,14 @@ def help_command(whisk_display):
     ----------
     whisk_display : Display
         The display object used by the whisk application to print content to the console
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''
     print("What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT")
     print("This is not case sensitive.")
 
     # Get the selected command.
-    selected_command = input("> ").upper()
+    selected_command = input_machine.gather_input().upper()
 
     # Print help information accordingly.
     if (selected_command == GET):
@@ -81,7 +86,7 @@ def help_command(whisk_display):
         whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
 
 
-def get_command(whisk_display, rest_client):
+def get_command(whisk_display, rest_client, input_machine):
     '''
     This method collects the From and Select portions for a GET request, runs it against MatchaDB,
     and prints the response code. It will also print exceptions, given that they occur.
@@ -92,14 +97,16 @@ def get_command(whisk_display, rest_client):
         The display object used by the whisk application to print content to the console
     rest_client : RestClient
         The rest client in use by the whisk application to run the GET request on the MatchaDB
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''
     # Gather the From portion of the command.
-    from_portion = "[\"" + input("From: ") + "\"]"
+    from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input("Select (key): ")
-    spart_two = input("Select (operation): ")
-    spart_three = input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key)")
+    spart_two = input_machine.gather_input("Select (operation)")
+    spart_three = input_machine.gather_input("Select (value)")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Use the Rest Client
@@ -114,7 +121,7 @@ def get_command(whisk_display, rest_client):
         whisk_display.print_error(response)
 
 
-def post_command(whisk_display, rest_client):
+def post_command(whisk_display, rest_client, input_machine):
     '''
     This method collects the From, Select, and Insert portions for a POST request, runs it against
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -125,18 +132,20 @@ def post_command(whisk_display, rest_client):
         The display object used by the whisk application to print content to the console
     rest_client : RestClient
         The rest client in use by the whisk application to run the POST request on the MatchaDB
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''
     # Gather the From portion of the command.
-    from_portion = "[\"" + input("From: ") + "\"]"
+    from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input("Select (key): ")
-    spart_two = input("Select (operation): ")
-    spart_three = input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key)")
+    spart_two = input_machine.gather_input("Select (operation)")
+    spart_three = input_machine.gather_input("Select (value)")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Gather the Insert portion of the command.
-    insert_portion = input("Insert: ")
+    insert_portion = input_machine.gather_input("Insert")
 
     # Use the Rest Client
     successful, response = rest_client.post_request(from_portion, select_portion, insert_portion)
@@ -150,7 +159,7 @@ def post_command(whisk_display, rest_client):
         whisk_display.print_error(response)
 
 
-def update_command(whisk_display, rest_client):
+def update_command(whisk_display, rest_client, input_machine):
     '''
     This method collects the From, Select, and Update portions for a UPDATE (put) request, runs it 
     against MatchaDB, and prints the response code. It will also print exceptions, given that they 
@@ -162,20 +171,22 @@ def update_command(whisk_display, rest_client):
         The display object used by the whisk application to print content to the console
     rest_client : RestClient
         The rest client in use by the whisk application to run the PUT (update) request on the MatchaDB
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''
     # Gather the From portion of the command.
-    from_portion = "[\"" + input("From: ") + "\"]"
+    from_portion = "[\"" + input_machine.gather_input("From: ") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input("Select (key): ")
-    spart_two = input("Select (operation): ")
-    spart_three = input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key): ")
+    spart_two = input_machine.gather_input("Select (operation): ")
+    spart_three = input_machine.gather_input("Select (value): ")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Gather the Update portion of the command.
-    upart_one = input("Update (key): ")
-    upart_two = input("Update (operation): ")
-    upart_three = input("Update (value): ")
+    upart_one = input_machine.gather_input("Update (key): ")
+    upart_two = input_machine.gather_input("Update (operation): ")
+    upart_three = input_machine.gather_input("Update (value): ")
     update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
 
     # Use the Rest Client
@@ -201,14 +212,16 @@ def delete_command(whisk_display, rest_client):
         The display object used by the whisk application to print content to the console
     rest_client : RestClient
         The rest client in use by the whisk application to run the DELETE request on the MatchaDB
+    input_machine : InputMachine
+        The machine used to gather the input at the console
     '''   
     # Gather the From portion of the command.
     from_portion = "[\"" + input("From: ") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input("Select (key): ")
-    spart_two = input("Select (operation): ")
-    spart_three = input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key): ")
+    spart_two = input_machine.gather_input("Select (operation): ")
+    spart_three = input_machine.gather_input("Select (value): ")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Develop the Parameter Values.
@@ -251,24 +264,26 @@ def main():
     rest_client = RestClient(protocol, host, port)
     protocol, host, port = rest_client.get_protocol_host_port()
 
+    input_machine = InputMachine()
+
     while True:
         # Remind the user where the command is currently pointed at.
         whisk_display.print_general("Using " + protocol + host + ":" + port + "/")
 
         # Get the command.
-        command_to_use = retrieve_command(whisk_display).upper()
+        command_to_use = retrieve_command(whisk_display, input_machine).upper()
 
         # Check which command this is for and run said command accordingly.
         if (command_to_use == GET):
-            get_command(whisk_display, rest_client)
+            get_command(whisk_display, rest_client, input_machine)
         elif (command_to_use == POST):
-            post_command(whisk_display, rest_client)
+            post_command(whisk_display, rest_client, input_machine)
         elif (command_to_use == UPDATE):
-            update_command(whisk_display, rest_client)
+            update_command(whisk_display, rest_client, input_machine)
         elif (command_to_use == DELETE):
-            delete_command(whisk_display, rest_client)
+            delete_command(whisk_display, rest_client, input_machine)
         elif (command_to_use == HELP):
-            help_command(whisk_display)
+            help_command(whisk_display, input_machine)
         elif (command_to_use == EXIT):
             break
 
