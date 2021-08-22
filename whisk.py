@@ -36,7 +36,7 @@ def retrieve_command(whisk_display, input_machine):
     whisk_display.print_general("Do note that this is not case sensitive.")
 
     # Gather and return the command.
-    return input_machine.gather_input("Your Command: ")
+    return input_machine.gather_input("Your Command")
 
 
 def help_command(whisk_display, input_machine):
@@ -55,7 +55,7 @@ def help_command(whisk_display, input_machine):
     print("This is not case sensitive.")
 
     # Get the selected command.
-    selected_command = input_machine.gather_input().upper()
+    selected_command = input_machine.gather_input("Gather Info On").upper()
 
     # Print help information accordingly.
     if (selected_command == GET):
@@ -175,18 +175,18 @@ def update_command(whisk_display, rest_client, input_machine):
         The machine used to gather the input at the console
     '''
     # Gather the From portion of the command.
-    from_portion = "[\"" + input_machine.gather_input("From: ") + "\"]"
+    from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input_machine.gather_input("Select (key): ")
-    spart_two = input_machine.gather_input("Select (operation): ")
-    spart_three = input_machine.gather_input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key)")
+    spart_two = input_machine.gather_input("Select (operation)")
+    spart_three = input_machine.gather_input("Select (value)")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Gather the Update portion of the command.
-    upart_one = input_machine.gather_input("Update (key): ")
-    upart_two = input_machine.gather_input("Update (operation): ")
-    upart_three = input_machine.gather_input("Update (value): ")
+    upart_one = input_machine.gather_input("Update (key)")
+    upart_two = input_machine.gather_input("Update (operation)")
+    upart_three = input_machine.gather_input("Update (value)")
     update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
 
     # Use the Rest Client
@@ -201,7 +201,7 @@ def update_command(whisk_display, rest_client, input_machine):
         whisk_display.print_error(response)
 
 
-def delete_command(whisk_display, rest_client):
+def delete_command(whisk_display, rest_client, input_machine):
     '''
     This method collects the From and Select portions for a DELETE request, runs it against 
     MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -216,12 +216,12 @@ def delete_command(whisk_display, rest_client):
         The machine used to gather the input at the console
     '''   
     # Gather the From portion of the command.
-    from_portion = "[\"" + input("From: ") + "\"]"
+    from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
     # Gather the Select portion of the command.
-    spart_one = input_machine.gather_input("Select (key): ")
-    spart_two = input_machine.gather_input("Select (operation): ")
-    spart_three = input_machine.gather_input("Select (value): ")
+    spart_one = input_machine.gather_input("Select (key)")
+    spart_two = input_machine.gather_input("Select (operation)")
+    spart_three = input_machine.gather_input("Select (value)")
     select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
     # Develop the Parameter Values.

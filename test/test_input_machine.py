@@ -9,7 +9,7 @@ import sys
 sys.path.append('src')
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, call
 from input_machine import InputMachine
 
 
@@ -35,21 +35,22 @@ class TestInputMachine(unittest.TestCase):
 
     def test_01_successful_gather_input(self):
         '''
-        Tests the gather_input method for successful usage.
+        Tests the gather_input method for successful usage. We check to see that the method returns our 
+        mocked value, as well as that the input method within gather_input was called with the correct
+        string.
         '''
         with patch('builtins.input') as mock_input:
-            mock_input = 1234 # A fake value, just to assure we got data from the input
-
+            mock_input.return_value = 1234  # A fake value to return
             contents = self.test_input_machine.gather_input(self.what_can_i_get_you)
-
-            # assert contents == 1234
-            assert mock_input.mock_calls == [call("%s %s".format(self.what_can_i_get_you, self.pointer_char))]
+            assert mock_input.mock_calls == [call('{} {}'.format(self.what_can_i_get_you, self.pointer_char))]
+            assert contents == 1234
 
 
     def test_02_unsuccessful_gather_input(self):
         '''
-        Checks that on an unsuccessful gathering that None is returned
+        Checks that on an unsuccessful gathering that None is returned.
         '''
-        # We need to fake an exception being made
-        contents = self.test_input_machine.gather_input(InputMachine())
-        assert contents is None
+        with patch('builtins.input') as mock_input:
+            mock_input.side_effect = [Exception]  # We will set a side effect for the mock input to be an exception
+            contents = self.test_input_machine.gather_input(self.what_can_i_get_you)
+            assert contents == None

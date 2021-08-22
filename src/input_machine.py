@@ -16,7 +16,7 @@ class InputMachine:
 
 
     # The general format for the input CLI statements
-    input_format = "%s %s"
+    input_format = "{} {}"
 
 
     def __init__(self, pointer_char = None):

@@ -2,3 +2,4 @@
 2021/04/12 - Imported from MatchaDB to a seperate repository.
 2021/06/20 - Implemented Display Singleton
 2021/07/05 - Implemented Rest Client Singleton
+2021/08/22 - Implemented Input Machine
