@@ -14,6 +14,8 @@
 
 2021/07/05 - Implemented Rest Client Singleton
 
+2021/08/22 - Implemented Input Machine
+
 **System Requirements**
 
 Python 3: 
