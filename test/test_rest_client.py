@@ -29,7 +29,7 @@ class TestRestClient(unittest.TestCase):
     test_sample_select_portion = "[[\"Flavor\", \"is\", \"Death by Chocolate\"]]"
 
     # A sample test INSERT query portion
-    test_sample_insert_portion = "[[\"Flavor\"=\"Mint Chocolate Chip\", \"Price\"=2.00]]"
+    test_sample_insert_portion = "{\"Flavor\":\"Mint Chocolate Chip\", \"Price\"=2.00}"
 
     # A sample test UPDATE query portion
     test_sample_update_portion = "[[\"Price\", \"to\", 1.00]]"
