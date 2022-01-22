@@ -3,7 +3,7 @@ Helps to facilitate better console input for the Whisk application.
 
 sammatime22, 2021
 '''
-
+import readline # Used for Arrow Keys (up-down->history, left-right->cursor)
 
 class InputMachine:
     '''
