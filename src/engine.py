@@ -25,6 +25,7 @@ class Engine:
 
     # General String Constants (TODO: Move to Bootloader)
     WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021-2022"
+    INSUFFICIENT_ARGUMENTS = "Not enough arguments were provided to continue."
 
 
     def __init__(self):

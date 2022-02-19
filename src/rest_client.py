@@ -15,7 +15,7 @@ class RestClient():
     # Default networking values.
     DEFAULT_PROTOCOL = "http://"   # Default is http
     DEFAULT_HOST = "127.0.0.1"     # Default is localhost
-    DEFAULT_PORT = "11150"          # Default is port 8080
+    DEFAULT_PORT = "11150"          # Default is port 11150
 
     # Class networking variables.
     protocol = DEFAULT_PROTOCOL
