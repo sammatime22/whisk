@@ -34,7 +34,7 @@ class Engine:
         '''
 
 
-    def retrieve_command(whisk_display, input_machine):
+    def retrieve_command(self, whisk_display, input_machine):
         '''
         This method promts the user to provide a command, and then returns that command so that it can
         be used by the rest of the application.
