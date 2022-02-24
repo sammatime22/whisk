@@ -7,6 +7,7 @@ import sys
 sys.path.append('src')
 
 import unittest
+from unittest.mock import patch, call
 from engine import Engine
 from display import Display
 from input_machine import InputMachine
@@ -35,7 +36,11 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that the retrieve command is successful.
         '''
-        self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
+        with patch('builtins.print') as mock_print:
+            please_provide = "\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT"
+            not_case_sensitive = "Do note that this is not case sensitive."
+            self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
+            assert len(mock_print.mock_calls) == 2 # [please_provide, not_case_sensitive]
 
 
     def test_02_retrieve_command_exception_handled(self):
