@@ -36,20 +36,24 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that the retrieve command is successful.
         '''
+        test_command = "GET"
         with patch('display.Display.print_general') as mock_print_general:
             with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
                 please_provide = "\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT"
                 not_case_sensitive = "Do note that this is not case sensitive."
                 your_command = "Your Command"
-                self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
-                mock_print_general.mock_calls == [call(please_provide), call(not_case_sensitive)]
-                mock_gather_input.mock_calls == [call(your_command)]
+                mock_gather_input.return_value = test_command
+                retrieved_command = self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
+                assert mock_print_general.mock_calls == [call(please_provide), call(not_case_sensitive)]
+                assert mock_gather_input.mock_calls == [call(your_command)]
+                assert retrieved_command == test_command
 
 
     def test_02_retrieve_command_exception_handled(self):
         '''
         Tests that the retrieve command can handle exceptions.
         '''
+        test_command = "STARBUCKS"
 
 
     # Tests for Help Command

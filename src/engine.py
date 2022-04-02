@@ -23,6 +23,10 @@ class Engine:
     EXIT = "EXIT"
 
 
+    # When a user provides a command that is not recognized
+    SKIP = "SKIP"
+
+
     # General String Constants (TODO: Move to Bootloader)
     WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021-2022"
     INSUFFICIENT_ARGUMENTS = "Not enough arguments were provided to continue."
@@ -50,7 +54,13 @@ class Engine:
         whisk_display.print_general("Do note that this is not case sensitive.")
 
         # Gather and return the command.
-        return input_machine.gather_input("Your Command")
+        command = input_machine.gather_input("Your Command")
+        if command is not None:
+            # Return the command, given that it does not cause an exception to be thrown
+            return command
+        else:
+            whisk_display.print_error("An unrecognized value was provided.")
+            return SKIP
 
 
     def help_command(whisk_display, input_machine):
