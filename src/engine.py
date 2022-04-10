@@ -63,7 +63,7 @@ class Engine:
             return self.SKIP
 
 
-    def help_command(whisk_display, input_machine):
+    def help_command(self, whisk_display, input_machine):
         '''
         Allows the user to get more information on different commands to better understand their 
         workings and how to use them.
@@ -75,39 +75,42 @@ class Engine:
         input_machine : InputMachine
             The machine used to gather the input at the console
         '''
-        print("What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT")
-        print("This is not case sensitive.")
+        whisk_display.print_general("What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT")
+        whisk_display.print_general("This is not case sensitive.")
 
         # Get the selected command.
         selected_command = input_machine.gather_input("Gather Info On").upper()
 
         # Print help information accordingly.
-        if (selected_command == GET):
-            whisk_display.print_general("This command allows users to retrieve data from the DB.")
-            whisk_display.print_general("Below are the promts provided with the GET command:")
-            whisk_display.print_general("From: Provide the name of the table in the database you would like data from.")
-            whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
-        elif (selected_command == POST):
-            whisk_display.print_general("This command allows users to insert data into the DB.")
-            whisk_display.print_general("Below are the promts provided with the POST command:")
-            whisk_display.print_general("From: Provide the name of the table in the database you would like to insert data.")
-            whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
-            whisk_display.print_general("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
-        elif (selected_command == UPDATE):
-            whisk_display.print_general("This command allows users to update data in the DB.")
-            whisk_display.print_general("Below are the promts provided with the UPDATE command:")
-            whisk_display.print_general("From: Provide the name of the table in the database you would like to update.")
-            whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
-            whisk_display.print_general("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
-        elif (selected_command == DELETE):
-            whisk_display.print_general("This command allows users to remove data from the DB.")
-            whisk_display.print_general("Below are the promts provided with the DELETE command:")
-            whisk_display.print_general("From: Provide the name of the table in the database you would remove data from.")
-            whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
-        elif (selected_command == HELP):
-            whisk_display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
-        elif (selected_command == EXIT):
-            whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
+        if selected_command is not None:
+            if (selected_command == self.GET):
+                whisk_display.print_general("This command allows users to retrieve data from the DB.")
+                whisk_display.print_general("Below are the promts provided with the GET command:")
+                whisk_display.print_general("From: Provide the name of the table in the database you would like data from.")
+                whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+            elif (selected_command == self.POST):
+                whisk_display.print_general("This command allows users to insert data into the DB.")
+                whisk_display.print_general("Below are the promts provided with the POST command:")
+                whisk_display.print_general("From: Provide the name of the table in the database you would like to insert data.")
+                whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs.")
+                whisk_display.print_general("Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array") 
+            elif (selected_command == self.UPDATE):
+                whisk_display.print_general("This command allows users to update data in the DB.")
+                whisk_display.print_general("Below are the promts provided with the UPDATE command:")
+                whisk_display.print_general("From: Provide the name of the table in the database you would like to update.")
+                whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+                whisk_display.print_general("Update: An update action of format \"key\" \"operation\" \"value\" in three inputs")        
+            elif (selected_command == self.DELETE):
+                whisk_display.print_general("This command allows users to remove data from the DB.")
+                whisk_display.print_general("Below are the promts provided with the DELETE command:")
+                whisk_display.print_general("From: Provide the name of the table in the database you would remove data from.")
+                whisk_display.print_general("Select: A query of format \"key\" \"operation\" \"value\", given over three inputs")
+            elif (selected_command == self.HELP):
+                whisk_display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
+            elif (selected_command == self.EXIT):
+                whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
+        else:
+            whisk_display.print_error("The command provided was not recognized")
 
 
     def get_command(whisk_display, rest_client, input_machine):
