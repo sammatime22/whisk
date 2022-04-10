@@ -60,7 +60,7 @@ class Engine:
             return command
         else:
             whisk_display.print_error("An unrecognized value was provided.")
-            return SKIP
+            return self.SKIP
 
 
     def help_command(whisk_display, input_machine):

@@ -36,14 +36,20 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that the retrieve command is successful.
         '''
+        # Set up the commands and expected print statements
         test_command = "GET"
+        please_provide = "\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT"
+        not_case_sensitive = "Do note that this is not case sensitive."
+        your_command = "Your Command"
+
+        # Mock the general printing and input gathering
         with patch('display.Display.print_general') as mock_print_general:
             with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
-                please_provide = "\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT"
-                not_case_sensitive = "Do note that this is not case sensitive."
-                your_command = "Your Command"
+                # Mock the returned value from the input machine, and call the retrieve_command method
                 mock_gather_input.return_value = test_command
                 retrieved_command = self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
+                
+                # Assess the expected calls were made within the method, and that we got the correct return value
                 assert mock_print_general.mock_calls == [call(please_provide), call(not_case_sensitive)]
                 assert mock_gather_input.mock_calls == [call(your_command)]
                 assert retrieved_command == test_command
@@ -53,7 +59,26 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that the retrieve command can handle exceptions.
         '''
-        test_command = "STARBUCKS"
+        # Set up the commands and expected print statements
+        please_provide = "\nPlease provide one of the following:\nGET, POST, UPDATE, DELETE, HELP, EXIT"
+        not_case_sensitive = "Do note that this is not case sensitive."
+        your_command = "Your Command"
+        unrecognized_value = "An unrecognized value was provided."
+        skip = "SKIP"
+
+        # Mock the general printing, error printing, and input gathering
+        with patch('display.Display.print_general') as mock_print_general:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+                    # Mock the returned value from the input machine, and call the retrieve_command method
+                    mock_gather_input.return_value = None
+                    retrieved_command = self.test_engine.retrieve_command(self.test_whisk_display, self.test_input_machine)
+                    
+                    # Assess the expected calls were made within the method, and that we got the correct return value
+                    assert mock_print_general.mock_calls == [call(please_provide), call(not_case_sensitive)]
+                    assert mock_print_error.mock_calls == [call(unrecognized_value)]
+                    assert mock_gather_input.mock_calls == [call(your_command)]
+                    assert retrieved_command == skip
 
 
     # Tests for Help Command
