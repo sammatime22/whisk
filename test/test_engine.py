@@ -114,7 +114,30 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the proper output from the POST command's help output.
         '''
+        # Set up the commands and expected print statements
+        test_command = "POST"
+        what_command = "What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT"
+        not_case_sensitive = "This is not case sensitive."
+        gather_info_on = "Gather Info On"
 
+        # Assign the expected print statements to variables
+        post_command_info_one = "This command allows users to insert data into the DB."
+        post_command_info_two = "Below are the promts provided with the POST command:"
+        post_command_info_three = "From: Provide the name of the table in the database you would like to insert data."
+        post_command_info_four = "Select: A query of format \"key\" \"operation\" \"value\", given over three inputs."
+        post_command_info_five = "Insert: An item to insert, in key-value pairs provided in 2D arrays in one 2D array"
+
+        # Mock the general printing and input gathering
+        with patch('display.Display.print_general') as mock_print_general:
+            with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+                # Mock the returned input from the input machine, and call the help command
+                mock_gather_input.return_value = test_command
+                self.test_engine.help_command(self.test_whisk_display, self.test_input_machine)
+
+                # Assess the expected calls were made within the method
+                assert mock_print_general.mock_calls == [call(what_command), call(not_case_sensitive), call(post_command_info_one), \
+                    call(post_command_info_two), call(post_command_info_three), call(post_command_info_four), call(post_command_info_five)]
+                assert mock_gather_input.mock_calls == [call(gather_info_on)]
 
     def test_05_help_command_update(self):
         '''
