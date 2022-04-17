@@ -143,6 +143,30 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the proper output from the UPDATE command's help output.
         '''
+        # Set up the commands and expected print statements
+        test_command = "UPDATE"
+        what_command = "What command would you like more info on?\nGET, POST, UPDATE, DELETE, HELP, EXIT"
+        not_case_sensitive = "This is not case sensitive."
+        gather_info_on = "Gather Info On"
+
+        # Assign the expected print statements to variables
+        update_command_info_one = "This command allows users to update data in the DB."
+        update_command_info_two = "Below are the promts provided with the UPDATE command:"
+        update_command_info_three = "From: Provide the name of the table in the database you would like to update."
+        update_command_info_four = "Select: A query of format \"key\" \"operation\" \"value\", given over three inputs"
+        update_command_info_five = "Update: An update action of format \"key\" \"operation\" \"value\" in three inputs"
+
+        # Mock the general printing and input gathering
+        with patch('display.Display.print_general') as mock_print_general:
+            with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+                # Mock the returned input from the input machine, and call the help command
+                mock_gather_input.return_value = test_command
+                self.test_engine.help_command(self.test_whisk_display, self.test_input_machine)
+
+                # Assess the expected calls were made within the method
+                assert mock_print_general.mock_calls == [call(what_command), call(not_case_sensitive), call(update_command_info_one),\
+                    call(update_command_info_two), call(update_command_info_three), call(update_command_info_four), call(update_command_info_five)]
+                assert mock_gather_input.mock_calls  == [call(gather_info_on)]
 
 
     def test_06_help_command_delete(self):
