@@ -79,10 +79,11 @@ class Engine:
         whisk_display.print_general("This is not case sensitive.")
 
         # Get the selected command.
-        selected_command = input_machine.gather_input("Gather Info On").upper()
+        selected_command = input_machine.gather_input("Gather Info On")
 
         # Print help information accordingly.
         if selected_command is not None:
+            selected_command = selected_command.upper()
             if (selected_command == self.GET):
                 whisk_display.print_general("This command allows users to retrieve data from the DB.")
                 whisk_display.print_general("Below are the promts provided with the GET command:")
@@ -109,8 +110,10 @@ class Engine:
                 whisk_display.print_general("After typing help in any casing, when prompted, provide the command of interest.")
             elif (selected_command == self.EXIT):
                 whisk_display.print_general("Just simply type exit when promted in any casing and you will exit the app.")
+            else:
+                whisk_display.print_error("The command provided was not recognized")
         else:
-            whisk_display.print_error("The command provided was not recognized")
+            whisk_display.print_error("An error was seen when gathering the command of interest")
 
 
     def get_command(whisk_display, rest_client, input_machine):
