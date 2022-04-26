@@ -116,7 +116,7 @@ class Engine:
             whisk_display.print_error("An error was seen when gathering the command of interest")
 
 
-    def get_command(whisk_display, rest_client, input_machine):
+    def get_command(self, whisk_display, rest_client, input_machine):
         '''
         This method collects the From and Select portions for a GET request, runs it against MatchaDB,
         and prints the response code. It will also print exceptions, given that they occur.
