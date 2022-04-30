@@ -140,6 +140,7 @@ class Engine:
         select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
         # Use the Rest Client
+        # TODO: What is a better word to describe "we could get the request" than "successful"?
         successful, response = rest_client.get_request(from_portion, select_portion)
 
         if successful:
