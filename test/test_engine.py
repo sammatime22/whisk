@@ -458,6 +458,55 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the proper output is displayed upon an erroneous GET request.
         '''
+        # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
+
+        # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Electrical Components"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Item Name"
+        select_operation_portion = "is"
+        select_value_portion = "LED"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
+
+        # Provide what we expect following a failed GET request
+        successful = False
+        error_message = "A connection error has occurred."
+
+        # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+
+        def side_effect_method_get(from_portionn, select_portionn):
+            return False, error_message
+
+        # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('rest_client.RestClient.get_request') as mock_get_request:
+                with patch('display.Display.print_error') as mock_print_error:
+                    # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_get_request.side_effect = side_effect_method_get
+                    self.test_engine.get_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+
+                    # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
+
+                    # Assert the proper values were returned
+                    assert mock_print_error.mock_calls.count(call(error_message)) == 1
 
 
     def test_14_get_command_exception_handled(self):

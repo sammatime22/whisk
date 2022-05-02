@@ -86,9 +86,9 @@ class RestClient():
             response = requests.get(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def post_request(self, from_portion, select_portion, insert_portion):
@@ -118,9 +118,9 @@ class RestClient():
             response = requests.post(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def update_request(self, from_portion, select_portion, update_portion):
@@ -150,9 +150,9 @@ class RestClient():
             response = requests.put(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def delete_request(self, from_portion, select_portion):
@@ -180,6 +180,6 @@ class RestClient():
             response = requests.delete(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."

@@ -88,7 +88,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "A connection error has occured."
+        assert response ==  "A connection error has occurred."
 
 
     def test_04_unknown_exception_get(self):
@@ -101,7 +101,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
+        assert response ==  "An unidentified error has occurred: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
 
     def test_05_successful_post(self):
@@ -156,7 +156,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "A connection error has occured."
+        assert response ==  "A connection error has occurred."
 
 
     def test_08_unknown_exception_post(self):
@@ -170,7 +170,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
+        assert response ==  "An unidentified error has occurred: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
 
     def test_09_successful_update(self):
@@ -225,7 +225,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "A connection error has occured."
+        assert response ==  "A connection error has occurred."
 
 
     def test_12_unknown_exception_update(self):
@@ -239,7 +239,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
+        assert response ==  "An unidentified error has occurred: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
 
     def test_13_successful_delete(self):
@@ -292,7 +292,7 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "A connection error has occured."
+        assert response ==  "A connection error has occurred."
 
 
     def test_16_unknown_exception_delete(self):
@@ -305,5 +305,5 @@ class TestRestClient(unittest.TestCase):
 
         # Test that the request contents came back as expected
         assert success == False
-        assert response ==  "An unidentified error has occured: unsupported operand type(s) for +: 'RestClient' and 'int'."
+        assert response ==  "An unidentified error has occurred: unsupported operand type(s) for +: 'RestClient' and 'int'."
 
