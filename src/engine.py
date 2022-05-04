@@ -130,26 +130,28 @@ class Engine:
         input_machine : InputMachine
             The machine used to gather the input at the console
         '''
-        # Gather the From portion of the command.
-        from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
+        try:
+            # Gather the From portion of the command.
+            from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
-        # Gather the Select portion of the command.
-        spart_one = input_machine.gather_input("Select (key)")
-        spart_two = input_machine.gather_input("Select (operation)")
-        spart_three = input_machine.gather_input("Select (value)")
-        select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
+            # Gather the Select portion of the command.
+            spart_one = input_machine.gather_input("Select (key)")
+            spart_two = input_machine.gather_input("Select (operation)")
+            spart_three = input_machine.gather_input("Select (value)")
+            select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-        # Use the Rest Client
-        # TODO: What is a better word to describe "we could get the request" than "successful"?
-        successful, response = rest_client.get_request(from_portion, select_portion)
+            # Use the Rest Client
+            retrieved, response = rest_client.get_request(from_portion, select_portion)
 
-        if successful:
-            if response.status_code == 200:
-                whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+            if retrieved:
+                if response.status_code == 200:
+                    whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+                else:
+                    whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
             else:
-                whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
-        else:
-            whisk_display.print_error(response)
+                whisk_display.print_error(response)
+        except Exception as e:
+            whisk_display.print_error(e)
 
 
     def post_command(whisk_display, rest_client, input_machine):
@@ -179,9 +181,9 @@ class Engine:
         insert_portion = input_machine.gather_input("Insert")
 
         # Use the Rest Client
-        successful, response = rest_client.post_request(from_portion, select_portion, insert_portion)
+        retrieved, response = rest_client.post_request(from_portion, select_portion, insert_portion)
 
-        if successful:
+        if retrieved:
             if response.status_code == 201:
                 whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
             else:
@@ -221,9 +223,9 @@ class Engine:
         update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
 
         # Use the Rest Client
-        successful, response = rest_client.update_request(from_portion, select_portion, update_portion)
+        retrieved, response = rest_client.update_request(from_portion, select_portion, update_portion)
 
-        if successful:
+        if retrieved:
             if response.status_code == 200:
                 whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
             else:
@@ -259,9 +261,9 @@ class Engine:
         parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
 
         # Use the Rest Client
-        successful, response = rest_client.delete_request(from_portion, select_portion)
+        retrieved, response = rest_client.delete_request(from_portion, select_portion)
 
-        if successful:
+        if retrieved:
             if response.status_code == 204:
                 whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
             else:

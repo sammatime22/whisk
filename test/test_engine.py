@@ -349,7 +349,7 @@ class TestEngine(unittest.TestCase):
         select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
 
         # Provide what we expect following a successful GET request
-        successful = True
+        retrieved = True
         status_code = 200
         content = "b'[{Item=LED, Price=$0.79}]'"
 
@@ -411,7 +411,7 @@ class TestEngine(unittest.TestCase):
         select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
         
         # Provide what we expect following a successful GET request
-        successful = False
+        retrieved = False
         status_code = 404
         content = ""
 
@@ -473,7 +473,7 @@ class TestEngine(unittest.TestCase):
         select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
 
         # Provide what we expect following a failed GET request
-        successful = False
+        retrieved = False
         error_message = "A connection error has occurred."
 
         # Define the "side effect" methods
@@ -513,6 +513,16 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the get_command can properly handle exceptions.
         '''
+        # Mock the input gathering, error display
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                # Cause the gather input method to immediately throw an exception
+                mock_gather_input.side_effect = [Exception]
+                self.test_engine.get_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+                
+                # See that the appropriate methods were called an appropriate amount of times
+                assert mock_gather_input.mock_calls.count(call("From")) == 1
+                assert len(mock_print_error.mock_calls) == 1
 
 
     # Tests for Post Command

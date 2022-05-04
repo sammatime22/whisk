@@ -73,8 +73,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -106,8 +106,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -138,8 +138,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -168,8 +168,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
