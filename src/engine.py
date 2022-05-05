@@ -154,7 +154,7 @@ class Engine:
             whisk_display.print_error(e)
 
 
-    def post_command(whisk_display, rest_client, input_machine):
+    def post_command(self, whisk_display, rest_client, input_machine):
         '''
         This method collects the From, Select, and Insert portions for a POST request, runs it against
         MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -168,31 +168,34 @@ class Engine:
         input_machine : InputMachine
             The machine used to gather the input at the console
         '''
-        # Gather the From portion of the command.
-        from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
+        try:
+            # Gather the From portion of the command.
+            from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
-        # Gather the Select portion of the command.
-        spart_one = input_machine.gather_input("Select (key)")
-        spart_two = input_machine.gather_input("Select (operation)")
-        spart_three = input_machine.gather_input("Select (value)")
-        select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
+            # Gather the Select portion of the command.
+            spart_one = input_machine.gather_input("Select (key)")
+            spart_two = input_machine.gather_input("Select (operation)")
+            spart_three = input_machine.gather_input("Select (value)")
+            select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-        # Gather the Insert portion of the command.
-        insert_portion = input_machine.gather_input("Insert")
+            # Gather the Insert portion of the command.
+            insert_portion = input_machine.gather_input("Insert")
 
-        # Use the Rest Client
-        retrieved, response = rest_client.post_request(from_portion, select_portion, insert_portion)
+            # Use the Rest Client
+            retrieved, response = rest_client.post_request(from_portion, select_portion, insert_portion)
 
-        if retrieved:
-            if response.status_code == 201:
-                whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+            if retrieved:
+                if response.status_code == 201:
+                    whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+                else:
+                    whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
             else:
-                whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
-        else:
-            whisk_display.print_error(response)
+                whisk_display.print_error(response)
+        except Exception as e:
+            whisk_display.print_error(e)
 
 
-    def update_command(whisk_display, rest_client, input_machine):
+    def update_command(self, whisk_display, rest_client, input_machine):
         '''
         This method collects the From, Select, and Update portions for a UPDATE (put) request, runs it 
         against MatchaDB, and prints the response code. It will also print exceptions, given that they 
@@ -207,34 +210,37 @@ class Engine:
         input_machine : InputMachine
             The machine used to gather the input at the console
         '''
-        # Gather the From portion of the command.
-        from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
+        try:
+            # Gather the From portion of the command.
+            from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
-        # Gather the Select portion of the command.
-        spart_one = input_machine.gather_input("Select (key)")
-        spart_two = input_machine.gather_input("Select (operation)")
-        spart_three = input_machine.gather_input("Select (value)")
-        select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
+            # Gather the Select portion of the command.
+            spart_one = input_machine.gather_input("Select (key)")
+            spart_two = input_machine.gather_input("Select (operation)")
+            spart_three = input_machine.gather_input("Select (value)")
+            select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-        # Gather the Update portion of the command.
-        upart_one = input_machine.gather_input("Update (key)")
-        upart_two = input_machine.gather_input("Update (operation)")
-        upart_three = input_machine.gather_input("Update (value)")
-        update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
+            # Gather the Update portion of the command.
+            upart_one = input_machine.gather_input("Update (key)")
+            upart_two = input_machine.gather_input("Update (operation)")
+            upart_three = input_machine.gather_input("Update (value)")
+            update_portion = "[[\"" + upart_one + "\", \"" + upart_two + "\", \"" + upart_three + "\"]]"
 
-        # Use the Rest Client
-        retrieved, response = rest_client.update_request(from_portion, select_portion, update_portion)
+            # Use the Rest Client
+            retrieved, response = rest_client.update_request(from_portion, select_portion, update_portion)
 
-        if retrieved:
-            if response.status_code == 200:
-                whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+            if retrieved:
+                if response.status_code == 200:
+                    whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+                else:
+                    whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
             else:
-                whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
-        else:
-            whisk_display.print_error(response)
+                whisk_display.print_error(response)
+        except Exception as e:
+            whisk_display.print_error(e)
 
 
-    def delete_command(whisk_display, rest_client, input_machine):
+    def delete_command(self, whisk_display, rest_client, input_machine):
         '''
         This method collects the From and Select portions for a DELETE request, runs it against 
         MatchaDB, and prints the response code. It will also print exceptions, given that they occur.
@@ -247,29 +253,32 @@ class Engine:
             The rest client in use by the whisk application to run the DELETE request on the MatchaDB
         input_machine : InputMachine
             The machine used to gather the input at the console
-        '''   
-        # Gather the From portion of the command.
-        from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
+        '''  
+        try: 
+            # Gather the From portion of the command.
+            from_portion = "[\"" + input_machine.gather_input("From") + "\"]"
 
-        # Gather the Select portion of the command.
-        spart_one = input_machine.gather_input("Select (key)")
-        spart_two = input_machine.gather_input("Select (operation)")
-        spart_three = input_machine.gather_input("Select (value)")
-        select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
+            # Gather the Select portion of the command.
+            spart_one = input_machine.gather_input("Select (key)")
+            spart_two = input_machine.gather_input("Select (operation)")
+            spart_three = input_machine.gather_input("Select (value)")
+            select_portion = "[[\"" + spart_one + "\", \"" + spart_two + "\", \"" + spart_three + "\"]]"
 
-        # Develop the Parameter Values.
-        parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
+            # Develop the Parameter Values.
+            parameter_vals = "{\"From\": " + from_portion + ", \"Select\": " + select_portion + "}"
 
-        # Use the Rest Client
-        retrieved, response = rest_client.delete_request(from_portion, select_portion)
+            # Use the Rest Client
+            retrieved, response = rest_client.delete_request(from_portion, select_portion)
 
-        if retrieved:
-            if response.status_code == 204:
-                whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+            if retrieved:
+                if response.status_code == 204:
+                    whisk_display.print_success(str(response.status_code) + " : " + str(response.content))
+                else:
+                    whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
             else:
-                whisk_display.print_error(str(response.status_code) + " : " + str(response.content))
-        else:
-            whisk_display.print_error(response)
+                whisk_display.print_error(response)
+        except Exception as e:
+            whisk_display.print_error(e)
 
 
     def run_engine(whisk_display, rest_client, input_machine):

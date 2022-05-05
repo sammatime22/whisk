@@ -548,7 +548,17 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the post_command can properly handle exceptions.
         '''
+        # Mock the input gathering, error display
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                # Cause the gather input method to immediately throw an exception
+                mock_gather_input.side_effect = [Exception]
+                self.test_engine.post_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
+                # See that the appropriate methods were called an appropriate amount of times
+                assert mock_gather_input.mock_calls.count(call("From")) == 1
+                assert len(mock_print_error.mock_calls) == 1
+ 
 
     # Tests for Update Command
     def test_19_update_command_successful(self):
@@ -573,6 +583,16 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the update_command can properly handle exceptions.
         '''
+        # Mock the input gathering, error display
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                # Cause the gather input method to immediately throw an exception
+                mock_gather_input.side_effect = [Exception]
+                self.test_engine.update_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+
+                # See that the appropriate methods were called an appropriate amount of times
+                assert mock_gather_input.mock_calls.count(call("From")) == 1
+                assert len(mock_print_error.mock_calls) == 1
 
 
     # Tests for Delete Command
@@ -598,6 +618,16 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the delete_command can properly handle exceptions.
         '''
+        # Mock the input gathering, error display
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                # Cause the gather input method to immediately throw an exception
+                mock_gather_input.side_effect = [Exception]
+                self.test_engine.delete_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+
+                # See that the appropriate methods were called an appropriate amount of times
+                assert mock_gather_input.mock_calls.count(call("From")) == 1
+                assert len(mock_print_error.mock_calls) == 1
 
 
     # Tests for Run Engine
