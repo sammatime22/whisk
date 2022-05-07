@@ -410,7 +410,7 @@ class TestEngine(unittest.TestCase):
         select_value_portion = "Ice Cream"
         select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
         
-        # Provide what we expect following a successful GET request
+        # Provide what we expect following an unsuccessful GET request
         retrieved = False
         status_code = 404
         content = ""
@@ -597,7 +597,71 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the proper output is displayed upon an unsuccessful POST request.
         '''
+        # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
+        insert = "Insert"
 
+        # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Magnets"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Strength (A/m)"
+        select_operation_portion = ">"
+        select_value_portion = "10"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
+        insert_portion_full = "{\"Name\": \"My Mag\"}"
+
+        # Provide what we expect following an unsuccessful POST request
+        retrieved = True
+        status_code = 409
+        content = ""
+        mock_response = self.MockResponse(status_code, content)
+
+        # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+            elif input_prompt == insert:
+                return insert_portion_full
+
+
+        def side_effect_method_post(from_portionn, select_portionn, insert_portionn):
+            if (from_portionn == from_portion_full) and \
+                (select_portionn == select_portion_full) and\
+                (insert_portionn == insert_portion_full):
+                return retrieved, mock_response
+            else:
+                return False, None
+
+         
+
+        # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.post_request') as mock_post_request:
+                    # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_post_request.side_effect = side_effect_method_post
+                    self.test_engine.post_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+
+                    # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
+                    assert mock_gather_input.mock_calls.count(call(insert)) == 1
+
+                    # Assert the proper values were returned
+                    assert mock_print_error.mock_calls == [call(str(mock_response.status_code) + " : " + str(mock_response.content))]
+  
 
     def test_17_post_command_erroneous(self):
         '''
