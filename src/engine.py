@@ -316,7 +316,7 @@ class Engine:
                 break
 
 
-    def kickstart():
+    def kickstart(self):
         '''
         This method kick starts the application. (TODO: Move to Bootloader)
         '''
@@ -324,7 +324,7 @@ class Engine:
         whisk_display = Display()
 
         # Start of app
-        whisk_display.print_general(WELCOME)
+        whisk_display.print_general(self.WELCOME)
 
         protocol = None
         host = None
@@ -346,4 +346,4 @@ class Engine:
         input_machine = InputMachine()
 
         # Begin the Engine
-        run_engine(whisk_display, rest_client, input_machine)
+        self.run_engine(whisk_display, rest_client, input_machine)
