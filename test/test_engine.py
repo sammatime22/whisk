@@ -667,7 +667,65 @@ class TestEngine(unittest.TestCase):
         '''
         Tests the proper output is displayed upon an erroneous POST request.
         '''
+        # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
+        insert = "Insert"
 
+        # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Sweaters"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = ""
+        select_operation_portion = ""
+        select_value_portion = ""
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
+        insert_portion_full = "{\"Name\": \"Too Comfy\"}"
+
+        # Provide what we expect following an unsuccessful POST request
+        retrieved = False
+        error_message = "An unidentified error has occurred: Out Of Memory"
+
+        # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+            elif input_prompt == insert:
+                return insert_portion_full
+
+        def side_effect_method_post(from_portionn, select_portionn, insert_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full)\
+                and (insert_portionn == insert_portion_full):
+                return retrieved, error_message
+            else:
+                return not retrieved, error_message
+
+        # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.post_request') as mock_post_request:
+                    # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_post_request.side_effect = side_effect_method_post
+                    self.test_engine.post_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+
+                    # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
+                    assert mock_gather_input.mock_calls.count(call(insert)) == 1
+
+                    # Assert the proper values were returned
+                    assert mock_print_error.mock_calls == [call(error_message)]
+  
 
     def test_18_post_command_exception_handled(self):
         '''
@@ -802,7 +860,6 @@ class TestEngine(unittest.TestCase):
         '''
         This test checks that the kickstart method would run without error.
         '''
-
         # Just providing the return of three values for the 
         # get_protocol_host_port method.
         def side_effect_method_protocol():
