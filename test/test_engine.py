@@ -389,7 +389,7 @@ class TestEngine(unittest.TestCase):
                     assert mock_gather_input.mock_calls.count(call(select_value)) == 1
 
                     # Assert the proper values were returned
-                    assert mock_print_success.mock_calls == [call(str(mock_response.status_code) + " : " + mock_response.content)]
+                    assert mock_print_success.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content))) == 1
 
 
     def test_12_get_command_unsuccessful(self):
@@ -451,7 +451,7 @@ class TestEngine(unittest.TestCase):
                     assert mock_gather_input.mock_calls.count(call(select_value)) == 1
 
                     # Assert the proper values were returned
-                    assert mock_print_error.mock_calls == [call(str(mock_response.status_code) + " : " + str(mock_response.content))]
+                    assert mock_print_error.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content))) == 1
 
 
     def test_13_get_command_erroneous(self):
@@ -590,7 +590,7 @@ class TestEngine(unittest.TestCase):
                     assert mock_gather_input.mock_calls.count(call(insert)) == 1
 
                     # Assert the proper values were returned
-                    assert mock_print_success.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content)))
+                    assert mock_print_success.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content))) == 1
    
 
     def test_16_post_command_unsuccessful(self):
@@ -660,7 +660,7 @@ class TestEngine(unittest.TestCase):
                     assert mock_gather_input.mock_calls.count(call(insert)) == 1
 
                     # Assert the proper values were returned
-                    assert mock_print_error.mock_calls == [call(str(mock_response.status_code) + " : " + str(mock_response.content))]
+                    assert mock_print_error.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content))) == 1
   
 
     def test_17_post_command_erroneous(self):
@@ -724,7 +724,7 @@ class TestEngine(unittest.TestCase):
                     assert mock_gather_input.mock_calls.count(call(insert)) == 1
 
                     # Assert the proper values were returned
-                    assert mock_print_error.mock_calls == [call(error_message)]
+                    assert mock_print_error.mock_calls.count(call(error_message)) == 1
   
 
     def test_18_post_command_exception_handled(self):
@@ -826,19 +826,76 @@ class TestEngine(unittest.TestCase):
         Tests the proper output is displayed upon an unsuccessful UPDATE request.
         '''
         # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
+        update_key = "Update (key)"
+        update_operation = "Update (operation)"
+        update_value = "Update (value)"
 
         # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Coffee"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Sauce"
+        select_operation_portion = ">"
+        select_value_portion = "headphones"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
+        update_key_portion = "price"
+        update_operation_portion = "to"
+        update_value_portion = "saucey"
+        update_portion_full = "[[\"" + update_key_portion + "\", \"" + update_operation_portion + "\", \"" + update_value_portion + "\"]]"
 
-        # Provide what we expect following a successful UPDATE request
+        # Provide what we expect following an unsuccessful UPDATE request
+        retrieved = True
+        status_code = 409
+        content = ""
+        mock_response = self.MockResponse(status_code, content)
 
         # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+            elif input_prompt == update_key:
+                return update_key_portion
+            elif input_prompt == update_operation:
+                return update_operation_portion
+            elif input_prompt == update_value:
+                return update_value_portion
+
+        def side_effect_method_update(from_portionn, select_portionn, update_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full)\
+                and (update_portionn == update_portion_full):
+                return retrieved, mock_response
+            else:
+                return not retrieved, None
 
         # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.update_request') as mock_update_request:
                     # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_update_request.side_effect = side_effect_method_update
+                    self.test_engine.update_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
                     # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
+                    assert mock_gather_input.mock_calls.count(call(update_key)) == 1 
+                    assert mock_gather_input.mock_calls.count(call(update_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(update_value)) == 1
 
                     # Assert the proper values were returned
+                    assert mock_print_error.mock_calls.count(call(str(status_code) + " : " + str(content))) == 1
 
 
     def test_21_update_command_erroneous(self):
@@ -846,19 +903,74 @@ class TestEngine(unittest.TestCase):
         Tests the proper output is displayed upon an erroneous UPDATE request.
         '''
         # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
+        update_key = "Update (key)"
+        update_operation = "Update (operation)"
+        update_value = "Update (value)"
 
         # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Vegetables"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Name"
+        select_operation_portion = "is"
+        select_value_portion = "Carrots"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
+        update_key_portion = "Price"
+        update_operation_portion = "is"
+        update_value_portion = "$4"
+        update_portion_full = "[[\"" + update_key_portion + "\", \"" + update_operation_portion + "\", \"" + update_value_portion + "\"]]"
 
-        # Provide what we expect following a successful UPDATE request
+        # Provide what we expect following an erroneous UPDATE request
+        retrieved = False
+        error_message = "A connection error has occurred."
 
         # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+            elif input_prompt == update_key:
+                return update_key_portion
+            elif input_prompt == update_operation:
+                return update_operation_portion
+            elif input_prompt == update_value:
+                return update_value_portion
+
+        def side_effect_method_update(from_portionn, select_portionn, update_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full)\
+                and (update_portionn == update_portion_full):
+                return retrieved, error_message
+            else:
+                return not retrieved, ""
 
         # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.update_request') as mock_update_request:
                     # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_update_request.side_effect = side_effect_method_update
+                    self.test_engine.update_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
                     # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
+                    assert mock_gather_input.mock_calls.count(call(update_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(update_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(update_value))
 
                     # Assert the proper values were returned
+                    assert mock_print_error.mock_calls.count(call(error_message)) == 1
 
 
     def test_22_update_command_exception_handled(self):
