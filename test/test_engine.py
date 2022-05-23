@@ -995,19 +995,59 @@ class TestEngine(unittest.TestCase):
         Tests the proper output is displayed upon a successful DELETE request.
         '''
         # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
 
         # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Books"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Title"
+        select_operation_portion = "is"
+        select_value_portion = "Making Poke"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
 
         # Provide what we expect following a successful DELETE request
+        retrieved = True
+        status_code = 204
+        content = ""
+        mock_response = self.MockResponse(status_code, content)
 
         # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+
+        def side_effect_method_delete(from_portionn, select_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full):
+                return retrieved, mock_response
+            else:
+                return not retrieved, None
 
         # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_success') as mock_print_success:
+                with patch('rest_client.RestClient.delete_request') as mock_delete_request:
                     # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_delete_request.side_effect = side_effect_method_delete
+                    self.test_engine.delete_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
                     # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
 
                     # Assert the proper values were returned
+                    assert mock_print_success.mock_calls.count(call(str(mock_response.status_code) + " : " + str(mock_response.content)))
 
 
     def test_24_delete_command_unsuccessful(self):
@@ -1015,19 +1055,60 @@ class TestEngine(unittest.TestCase):
         Tests the proper output is displayed upon an unsuccessful DELETE request.
         '''
         # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
 
         # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Milkshakes"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Flavor"
+        select_operation_portion = "is"
+        select_value_portion = "earpods"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
 
-        # Provide what we expect following a successful DELETE request
+        # Provide what we expect following an unsuccessful DELETE request
+        retrieved = True
+        status_code = 409
+        content = ""
+        mock_response = self.MockResponse(status_code, content)
 
         # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+
+
+        def side_effect_method_delete(from_portionn, select_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full):
+                return retrieved, mock_response
+            else:
+                return not retrieved, None
 
         # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.delete_request') as mock_delete_request:
                     # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_delete_request.side_effect = side_effect_method_delete
+                    self.test_engine.delete_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
                     # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
 
                     # Assert the proper values were returned
+                    assert mock_print_error.mock_calls.count(call(str(str(status_code) + " : " + str(content))))
 
 
     def test_25_delete_command_erroneous(self):
@@ -1035,19 +1116,57 @@ class TestEngine(unittest.TestCase):
         Tests the proper output is displayed upon an erroneous DELETE request.
         '''
         # Provide the parameters we will use for the gather_input methods
+        f_rom = "From"
+        select_key = "Select (key)"
+        select_operation = "Select (operation)"
+        select_value = "Select (value)"
 
         # Provide what parameters we will mock that the user provides at the CLI
+        from_portion = "Gogurt"
+        from_portion_full = "[\"" + from_portion + "\"]"
+        select_key_portion = "Price"
+        select_operation_portion = ">"
+        select_value_portion = "40.00"
+        select_portion_full = "[[\"" + select_key_portion + "\", \"" + select_operation_portion + "\", \"" + select_value_portion + "\"]]"
 
-        # Provide what we expect following a successful DELETE request
+        # Provide what we expect following an erroneous DELETE request
+        retrieved = False
+        response = "A connection error has occurred."
 
         # Define the "side effect" methods
+        def side_effect_method_gather(input_prompt):
+            if input_prompt == f_rom:
+                return from_portion
+            elif input_prompt == select_key:
+                return select_key_portion
+            elif input_prompt == select_operation:
+                return select_operation_portion
+            elif input_prompt == select_value:
+                return select_value_portion
+
+        def side_effect_method_delete(from_portionn, select_portionn):
+            if (from_portionn == from_portion_full) and (select_portionn == select_portion_full):
+                return retrieved, response
+            else:
+                return not retrieved, None
 
         # Mock the input machine, display, and rest client
+        with patch('input_machine.InputMachine.gather_input') as mock_gather_input:
+            with patch('display.Display.print_error') as mock_print_error:
+                with patch('rest_client.RestClient.delete_request') as mock_delete_request:
                     # Mock the return values and call the command
+                    mock_gather_input.side_effect = side_effect_method_gather
+                    mock_delete_request.side_effect = side_effect_method_delete
+                    self.test_engine.delete_command(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
 
                     # Assert the appropriate commands were provided to the appropriate methods
+                    assert mock_gather_input.mock_calls.count(call(f_rom)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_key)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_operation)) == 1
+                    assert mock_gather_input.mock_calls.count(call(select_value)) == 1
 
                     # Assert the proper values were returned
+                    assert mock_print_error.mock_calls.count(call(response)) == 1
 
 
     def test_26_delete_command_exception_handled(self):
@@ -1100,16 +1219,11 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that when EXIT is provided, that no actions are further called.
         '''
-
-
-    def test_33_run_engine_exception_handling(self):
-        '''
-        Tests that the run_engine method can properly handle errors.
-        '''
+        # just test that print_general is only called once
 
 
     # Tests for Kickstart
-    def test_34_kickstart(self):
+    def test_33_kickstart(self):
         '''
         This test checks that the kickstart method would run without error.
         '''
