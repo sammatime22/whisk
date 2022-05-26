@@ -32,6 +32,10 @@ class Engine:
     INSUFFICIENT_ARGUMENTS = "Not enough arguments were provided to continue."
 
 
+    host = None
+    port = None
+    protocol = None
+
     def __init__(self):
         '''
         An initializer for the engine.
@@ -281,7 +285,7 @@ class Engine:
             whisk_display.print_error(e)
 
 
-    def run_engine(whisk_display, rest_client, input_machine):
+    def run_engine(self, whisk_display, rest_client, input_machine):
         '''
         Essentially the main method of the application.
 
@@ -296,23 +300,23 @@ class Engine:
         '''  
         while True:
             # Remind the user where the command is currently pointed at.
-            whisk_display.print_general("Using " + protocol + host + ":" + port + "/")
+            whisk_display.print_general("Using " + str(self.protocol) + str(self.host) + ":" + str(self.port) + "/")
 
             # Get the command.
-            command_to_use = retrieve_command(whisk_display, input_machine).upper()
+            command_to_use = self.retrieve_command(whisk_display, input_machine).upper()
 
             # Check which command this is for and run said command accordingly.
-            if (command_to_use == GET):
-                get_command(whisk_display, rest_client, input_machine)
-            elif (command_to_use == POST):
-                post_command(whisk_display, rest_client, input_machine)
-            elif (command_to_use == UPDATE):
-                update_command(whisk_display, rest_client, input_machine)
-            elif (command_to_use == DELETE):
-                delete_command(whisk_display, rest_client, input_machine)
-            elif (command_to_use == HELP):
-                help_command(whisk_display, input_machine)
-            elif (command_to_use == EXIT):
+            if (command_to_use == self.GET):
+                self.get_command(whisk_display, rest_client, input_machine)
+            elif (command_to_use == self.POST):
+                self.post_command(whisk_display, rest_client, input_machine)
+            elif (command_to_use == self.UPDATE):
+                self.update_command(whisk_display, rest_client, input_machine)
+            elif (command_to_use == self.DELETE):
+                self.delete_command(whisk_display, rest_client, input_machine)
+            elif (command_to_use == self.HELP):
+                self.help_command(whisk_display, input_machine)
+            elif (command_to_use == self.EXIT):
                 break
 
 
@@ -326,21 +330,17 @@ class Engine:
         # Start of app
         whisk_display.print_general(self.WELCOME)
 
-        protocol = None
-        host = None
-        port = None
-
         # Get the hostname, if it exists.
         if len(sys.argv) > 2:
-            host = sys.argv[1]
+            self.host = sys.argv[1]
 
         # Get the portname, if it exists.
         if len(sys.argv) > 3:
-            port = sys.argv[2]
+            self.port = sys.argv[2]
 
         # Start up the Rest Client
-        rest_client = RestClient(protocol, host, port)
-        protocol, host, port = rest_client.get_protocol_host_port()
+        rest_client = RestClient(self.protocol, self.host, self.port)
+        self.protocol, self.host, self.port = rest_client.get_protocol_host_port()
 
         # Start up the Input Machine
         input_machine = InputMachine()

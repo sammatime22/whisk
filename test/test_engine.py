@@ -1219,7 +1219,16 @@ class TestEngine(unittest.TestCase):
         '''
         Tests that when EXIT is provided, that no actions are further called.
         '''
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return "exit"
+
         # just test that print_general is only called once
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 1
+
 
 
     # Tests for Kickstart
