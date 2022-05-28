@@ -1,7 +1,7 @@
 '''
 This file tests the workings of the Whisk engine, that it operates accordingly under given inputs
 
-sammatime22, 2021-2022
+sammatime22, 2022
 '''
 import sys
 sys.path.append('src')

@@ -2,11 +2,9 @@
 
 **Summary**: _An application that allows quick client access to MatchaDB._
 
-**Status**: Beta Version 1.0.3
+**Status**: Beta Version 1.0.4
 
 **Recent Updates**:
-
-2021/06/20 - Implemented Display Singleton
 
 2021/07/05 - Implemented Rest Client Singleton
 
@@ -15,6 +13,8 @@
 2021/11/13 - Changed Insert portion of POST Request from 2D Array to JSON Object
 
 2022/01/22 - Provided the capability to use the arrow keys on the CLI
+
+2022/05/28 - Fully developed engine
 
 **System Requirements**
 
