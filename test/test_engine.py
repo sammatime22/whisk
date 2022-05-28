@@ -1191,23 +1191,79 @@ class TestEngine(unittest.TestCase):
         Tests that when GET is provided, that get_command is called.
         '''
 
+        retrieved_command_return_values = ["exit", "get"]
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return retrieved_command_return_values.pop()
+
+        def side_effect_method_get(whisk_displayy, rest_clientt, input_machinee):
+            return None
+
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.get_command = side_effect_method_get
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 2
+
 
     def test_28_run_engine_post_command_called(self):
         '''
         Tests that when POST is provided, that post_command is called.
         '''
 
+        retrieved_command_return_values = ["exit", "post"]
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return retrieved_command_return_values.pop()
+
+        def side_effect_method_post(whisk_displayy, rest_clientt, input_machinee):
+            return None
+
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.post_command = side_effect_method_post
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 2
 
     def test_29_run_engine_update_command_called(self):
         '''
         Tests that when UPDATE is provided, that update_command is called.
         '''
 
+        retrieved_command_return_values = ["exit", "update"]
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return retrieved_command_return_values.pop()
+
+        def side_effect_method_update(whisk_displayy, rest_clientt, input_machinee):
+            return None
+
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.update_command = side_effect_method_update
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 2
+
 
     def test_30_run_engine_delete_command_called(self):
         '''
         Tests that when DELETE is provided, that delete_command is called.
         '''
+
+        retrieved_command_return_values = ["exit", "delete"]
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return retrieved_command_return_values.pop()
+
+        def side_effect_method_delete(whisk_displayy, rest_clientt, input_machinee):
+            return None
+
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.delete_command = side_effect_method_delete
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 2
+
 
     def test_31_run_engine_help_command_called(self):
         '''
