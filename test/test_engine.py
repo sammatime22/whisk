@@ -1214,6 +1214,20 @@ class TestEngine(unittest.TestCase):
         Tests that when HELP is provided, that help_command is called.
         '''
 
+        retrieved_command_return_values = ["exit", "help"]
+
+        def side_effect_method_retrieve_command(whisk_displayy, input_machinee):
+            return retrieved_command_return_values.pop()
+
+        def side_effect_method_help(whisk_displayy, input_machinee):
+            return None
+
+        with patch('display.Display.print_general') as mock_print_general:
+            self.test_engine.retrieve_command = side_effect_method_retrieve_command
+            self.test_engine.help_command = side_effect_method_help
+            self.test_engine.run_engine(self.test_whisk_display, self.test_rest_client, self.test_input_machine)
+            assert len(mock_print_general.mock_calls) == 2
+
 
     def test_32_run_engine_exit_command_called(self):
         '''
