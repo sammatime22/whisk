@@ -1,7 +1,7 @@
 '''
 Helps to facilitate better console input for the Whisk application.
 
-sammatime22, 2021
+sammatime22, 2021-2022
 '''
 import readline # Used for Arrow Keys (up-down->history, left-right->cursor)
 

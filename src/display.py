@@ -1,7 +1,7 @@
 '''
 Helps to facilitate better console output for the Whisk application.
 
-sammatime22, 2021
+sammatime22, 2021-2022
 '''
 from enum import Enum
 

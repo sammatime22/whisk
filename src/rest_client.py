@@ -1,7 +1,7 @@
 '''
 This file handles the entirety of the development of the REST calls to Matcha DB.
 
-sammatime22, 2021
+sammatime22, 2021-2022
 '''
 import requests
 
@@ -15,7 +15,7 @@ class RestClient():
     # Default networking values.
     DEFAULT_PROTOCOL = "http://"   # Default is http
     DEFAULT_HOST = "127.0.0.1"     # Default is localhost
-    DEFAULT_PORT = "11150"          # Default is port 8080
+    DEFAULT_PORT = "11150"          # Default is port 11150
 
     # Class networking variables.
     protocol = DEFAULT_PROTOCOL
@@ -73,8 +73,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -86,9 +86,9 @@ class RestClient():
             response = requests.get(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def post_request(self, from_portion, select_portion, insert_portion):
@@ -106,8 +106,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -118,9 +118,9 @@ class RestClient():
             response = requests.post(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def update_request(self, from_portion, select_portion, update_portion):
@@ -138,8 +138,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -150,9 +150,9 @@ class RestClient():
             response = requests.put(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
 
 
     def delete_request(self, from_portion, select_portion):
@@ -168,8 +168,8 @@ class RestClient():
 
         Return
         ----------
-        status : boolean
-            The status of the request (successful - True, unsuccessful - False)
+        retrieval_status : boolean
+            The retrieval_status of the request (successful - True, unsuccessful - False)
         response OR statement : response object OR string
             The response object or a statement containing the error
         '''
@@ -180,6 +180,6 @@ class RestClient():
             response = requests.delete(self.protocol + self.host + ":" + self.port + "/", data = repr(parameter_vals))
             return True, response
         except requests.exceptions.ConnectionError:
-            return False, "A connection error has occured."
+            return False, "A connection error has occurred."
         except Exception as e:
-            return False, "An unidentified error has occured: " + str(e) + "."
+            return False, "An unidentified error has occurred: " + str(e) + "."
