@@ -1,7 +1,7 @@
 '''
 Runs the other components of Whisk, actively responding and interpreting commands.
 
-sammatime22, 2021-2022
+sammatime22, 2022
 '''
 import sys
 from display import Display
@@ -25,11 +25,6 @@ class Engine:
 
     # When a user provides a command that is not recognized
     SKIP = "SKIP"
-
-
-    # General String Constants (TODO: Move to Bootloader)
-    WELCOME = "Welcome to Whisk, the MatchaDB Tester!\nSammaTime22, 2021-2022"
-    INSUFFICIENT_ARGUMENTS = "Not enough arguments were provided to continue."
 
 
     host = None
@@ -318,32 +313,3 @@ class Engine:
                 self.help_command(whisk_display, input_machine)
             elif (command_to_use == self.EXIT):
                 break
-
-
-    def kickstart(self):
-        '''
-        This method kick starts the application. (TODO: Move to Bootloader)
-        '''
-        # Start up the display
-        whisk_display = Display()
-
-        # Start of app
-        whisk_display.print_general(self.WELCOME)
-
-        # Get the hostname, if it exists.
-        if len(sys.argv) > 2:
-            self.host = sys.argv[1]
-
-        # Get the portname, if it exists.
-        if len(sys.argv) > 3:
-            self.port = sys.argv[2]
-
-        # Start up the Rest Client
-        rest_client = RestClient(self.protocol, self.host, self.port)
-        self.protocol, self.host, self.port = rest_client.get_protocol_host_port()
-
-        # Start up the Input Machine
-        input_machine = InputMachine()
-
-        # Begin the Engine
-        self.run_engine(whisk_display, rest_client, input_machine)

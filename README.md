@@ -2,11 +2,9 @@
 
 **Summary**: _An application that allows quick client access to MatchaDB._
 
-**Status**: Beta Version 1.0.4
+**Status**: Version 1.0.0
 
 **Recent Updates**:
-
-2021/07/05 - Implemented Rest Client Singleton
 
 2021/08/22 - Implemented Input Machine
 
@@ -15,6 +13,8 @@
 2022/01/22 - Provided the capability to use the arrow keys on the CLI
 
 2022/05/28 - Fully developed engine
+
+2022/05/29 - Bootloader finished, first release
 
 **System Requirements**
 
