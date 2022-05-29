@@ -6,9 +6,8 @@ sammatime22, 2021-2022
 '''
 import sys
 sys.path.append('src')
-from engine import Engine
+from bootloader import kickstart
 
-# Bootload the application.
+# Kickstart the application.
 if __name__ == "__main__":
-    engine = Engine()
-    engine.kickstart()
+    kickstart(sys.argv)

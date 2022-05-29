@@ -6,3 +6,4 @@
 2021/11/13 - Changed Insert portion of POST Request from 2D Array to JSON Object
 2022/01/22 - Provided the capability to use the arrow keys on the CLI
 2022/05/28 - Fully developed engine
+2022/05/29 - Bootloader finished, first release
