@@ -21,3 +21,7 @@
 Python 3: 
 
     - Python 3.5.2 (v3.5.2:4def2a2901a5, Jun 26 2016, 10:47:25)
+
+
+To run unit tests:
+$ python3 -m unittest discover test/ 
